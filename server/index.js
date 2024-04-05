@@ -6,4 +6,3 @@ mongoose.set('strictQuery', false);
 mongoDBConnect();
 
 
-console.log(process.env.URL)
