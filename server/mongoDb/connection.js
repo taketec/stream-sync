@@ -1,12 +1,12 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
 const mongoDBConnect = () => {
   try {
-    MongoClient.connect(process.env.URL||'mongodb://localhost:27017/stream-sync', {
+    mongoose.connect(process.env.URL||'mongodb://localhost:27017/chat-app-v2', {
+      useUnifiedTopology: true,
       useNewUrlParser: true,
-      useUnifiedTopology: true
     });
-    console.log("MongoDB - Connected",process.env.URL);
+    console.log("MongoDB - Connected at " + process.env.URL);
   } catch (error) {
     console.log("Error - MongoDB Connection " + error);
   }
