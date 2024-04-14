@@ -22,7 +22,6 @@ export const register = async (req, res) => {
     const { email, password } = req.body;
     try {
       const valid = await user.findOne({ email });
-      console.log(email,password,'-----------------------------------------------------')
       if (!valid) return res.status(404).json({ message: 'User does not exist' }); // Added return here
   
       const validPassword = await argon2.verify(valid.password, password);
