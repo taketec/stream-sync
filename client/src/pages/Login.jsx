@@ -55,8 +55,9 @@ const Login = () => {
   
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-100">
-        <div className="w-full max-w-md p-8 space-y-3 rounded-lg bg-white">
+        <div className="w-full max-w-md p-8 space-y-3 rounded-lg bg-white ">
           <h1 className="text-2xl font-bold text-center">Login</h1>
+          <p className='text-[#000000] text-[12px] tracking-wider font-medium'>No Account ? <Link className='text-[rgba(0,195,154,1)] underline' to="/register">Sign up</Link></p>
           {errorMessage && <div className="text-red-500 text-center">{errorMessage}</div>}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col">
@@ -95,6 +96,9 @@ const Login = () => {
               {isLoading ? 'Logging in...' : 'Login'}
             </button>
           </form>
+          <div className="flex justify-center mt-8">  {/* Added mt-8 for margin-top */}
+            <h1 className="text-xs text-center ">welcome to streamsync 📺</h1>
+          </div>        
         </div>
       </div>
     );
