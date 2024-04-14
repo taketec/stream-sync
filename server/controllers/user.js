@@ -7,7 +7,7 @@ export const register = async (req, res) => {
   try {
     const existingUser = await user.findOne({ email });
     if (existingUser)
-      return res.status(400).json({ error: 'User already Exits' });
+      return res.status(400).json({ error: 'User already Exists' });
     const newuser = new user({ email, password,name: username });
     const token = await newuser.generateAuthToken();
     await newuser.save();

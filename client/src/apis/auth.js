@@ -20,11 +20,14 @@ export const loginUser = async (body) => {
 
 export const registerUser = async (body) => {
   try {
-    console.log(body)
     return await axios.post(`${url}/auth/register`, body);
     
   } catch (error) {
-    console.log('error in register api');
+    if (error.response && error.response.data && error.response.data.error) {
+      return { error: error.response.data.error };
+    } else {
+      return { error: "An unexpected error occurred." };
+    }
   }
 };
 export const validUser = async () => {

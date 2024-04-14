@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // For navigation
-
 import { registerUser } from '../apis/auth'; // Assuming your register API function
 
 const Register = () => {
@@ -17,21 +16,19 @@ const Register = () => {
     setIsLoading(true);
     setErrorMessage(null);
 
-    try {
-      const response = await registerUser({
-        username,
-        email,
-        password,
-      });
-
-      console.log('Registration successful:', response.data); // Assuming response contains success message
-
-      navigate('/login'); // Redirect to login page after successful registration
-    } catch (error) {
-      console.error('Registration error:', error);
-      setErrorMessage(error.response?.data?.message || 'Registration failed');
-    } finally {
+    const { data, error } = await registerUser({username,email,password}); // Get error from response
+    if (data?.token) {
+      localStorage.setItem("userToken", data.token);
       setIsLoading(false);
+      navigate("/dashboard");
+    } else {
+      setIsLoading(false);
+      if (error) {
+        console.log(error)
+        setErrorMessage(error); // Set error message if provided in response
+      } else {
+        setErrorMessage("Invalid Credentials!");
+      }
     }
   };
   return (
