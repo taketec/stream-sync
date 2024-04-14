@@ -3,9 +3,7 @@ import user from '../models/user.js';
 
 
 export const register = async (req, res) => {
-    console.log(req.body)
     const { firstname, lastname, email, password } = req.body;
-    console.log(firstname, lastname, email, passwords)
     try {
       const existingUser = await user.findOne({ email });
       if (existingUser)
@@ -24,24 +22,26 @@ export const register = async (req, res) => {
     const { email, password } = req.body;
     try {
       const valid = await user.findOne({ email });
-      if (!valid) res.status(200).json({ message: 'User dont exist' });
-      const validPassword = await argon2.verify(valid.password,password);
+      console.log(email,password,'-----------------------------------------------------')
+      if (!valid) return res.status(404).json({ message: 'User does not exist' }); // Added return here
+  
+      const validPassword = await argon2.verify(valid.password, password);
       if (!validPassword) {
-        res.status(200).json({ message: 'Invalid Credentials' });
-      } else {
-        const token = await valid.generateAuthToken();
-        await valid.save();
-        res.cookie('userToken', token, {
-          httpOnly: true,
-          maxAge: 24 * 60 * 60 * 1000,
-        });
-        res.status(200).json({ token: token, status: 200 });
+        return res.status(401).json({ message: 'Invalid Credentials' }); // Added return here
       }
+  
+      const token = await valid.generateAuthToken();
+      await valid.save();
+      res.cookie('userToken', token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+      return res.status(200).json({ token: token, status: 200 }); // Added return here
     } catch (error) {
-      res.status(500).json({ error: error });
+      return res.status(500).json({ error: error.message }); // Send only error message
     }
   };
-
+  
   export const validUser = async (req, res) => {
     try {
       const validuser = await user

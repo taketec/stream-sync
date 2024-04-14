@@ -1,0 +1,103 @@
+
+import React, { useState, useEffect } from 'react';
+import { Link,useNavigate } from 'react-router-dom'; // For navigation after login
+
+import { loginUser, validUser } from '../apis/auth';
+
+
+const Login = () => {
+    const navigate = useNavigate();
+  
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+  
+    useEffect(() => {
+      const checkAuth = async () => {
+        try {
+          const token = localStorage.getItem('userToken');
+
+          if (token) {
+            const response = await validUser();
+            if (response.token) {
+              navigate('/dashboard'); // Replace with your dashboard route
+            } else {
+              localStorage.removeItem('userToken'); // Clear invalid token
+            }
+          }
+        } catch (error) {
+          console.error('Error checking authentication:', error);
+        }
+      };
+  
+      checkAuth();
+    }, []); // Run only on component mount
+  
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+      setIsLoading(true);
+      setErrorMessage(null);
+  
+      try {
+        const response = await loginUser({ email, password });
+        const token = response.data.token; // Assuming token is in response data
+  
+        localStorage.setItem('userToken', token);
+        navigate('/dashboard'); // Replace with your dashboard route
+      } catch (error) {
+        console.error('Login error:', error);
+        setErrorMessage(error.response?.data?.message || 'Login failed');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+        <div className="w-full max-w-md p-8 space-y-3 rounded-lg bg-white">
+          <h1 className="text-2xl font-bold text-center">Login</h1>
+          {errorMessage && <div className="text-red-500 text-center">{errorMessage}</div>}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex flex-col">
+              <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="password" className="text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`px-3 py-2 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-700 ${
+                isLoading ? 'cursor-not-allowed opacity-50' : ''
+              }`}
+            >
+              {isLoading ? 'Logging in...' : 'Login'}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  };
+  
+  export default Login;
