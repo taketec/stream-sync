@@ -14,7 +14,7 @@ export const register = async (req, res) => {
     res.json({ message: 'success', token: token });
   } catch (error) {
     console.log('Error in register ' + error);
-    res.status(500).send(error);
+    res.status(500).json({error:error});
   }
 };
 export const login = async (req, res) => {
