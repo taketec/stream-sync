@@ -21,7 +21,7 @@ const Login = () => {
           if (token) {
             const response = await validUser();
             if (response.token) {
-              navigate('/dashboard'); // Replace with your dashboard route
+              navigate('/room/123'); // Replace with your dashboard route
             } else {
               localStorage.removeItem('userToken'); // Clear invalid token
             }
@@ -44,7 +44,7 @@ const Login = () => {
         const token = response.data.token; // Assuming token is in response data
   
         localStorage.setItem('userToken', token);
-        navigate('/dashboard'); // Replace with your dashboard route
+        navigate('/room/123'); // Replace with your room route
       } catch (error) {
         console.error('Login error:', error);
         setErrorMessage(error.response?.data?.message || 'Login failed');
