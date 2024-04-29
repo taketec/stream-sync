@@ -1,0 +1,15 @@
+{
+  "name": "stream-sync",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"cd server && npm start\" \"cd client && npm start\" "
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "socket.io-client": "^4.7.5"
+  }
+}
