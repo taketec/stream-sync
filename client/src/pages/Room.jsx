@@ -59,7 +59,6 @@ const Room = () => {
   useEffect(() => {
     const join_room = async() => {
       socket = io('http://localhost:8000')
-      console.log(username,"asasfdasdfasdfasdf")
       const response = await validUser();
       username = response.user.name;
   
