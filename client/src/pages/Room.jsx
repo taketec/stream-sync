@@ -178,7 +178,7 @@ const Room = () => {
         global_timestamp: get_global_time(correction.current),
         client_uid: get_jwt().substring(37,70)
       }
-      console.log(`########### room-id ################ ${roomId}`)
+      //console.log(`########### room-id ################ ${roomId}`)
       socket.emit("state_update_from_client",{room : roomId ,state: state_image})
     }
     else{console.log(`ignored event due to it being a result of unwanted event being fired, last updated = ${lastUpdated.current}`)}
