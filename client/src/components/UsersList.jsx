@@ -2,7 +2,7 @@ import React from 'react';
 
 const Userlist = ({ user_list }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden">
+    <div className="bg-white overflow-hidden">
       <div className="px-6 py-4">
         <h2 className="text-xl font-semibold mb-2">Users in this room</h2>
         <ul>

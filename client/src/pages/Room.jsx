@@ -148,7 +148,7 @@ const Room = () => {
   //this whole thing runs a bit weird in react strict mode, since the useeffect is ran twice it results in the whole process done twice
   useEffect(()=>{
     const do_time_sync = async() =>{
-      for(let i = 0; i <  1; i++){
+      for(let i = 0; i <  10; i++){
         await timeout(1000)
         do_time_sync_one_cycle_backward()
         await timeout(1000)
@@ -202,7 +202,7 @@ const Room = () => {
       let state_image = {
         video_timestamp : seconds,//not using ref becuase its buggy, gives time before the seek event, the onSeek callback is built for this. 
         lastUpdated : get_global_time(correction.current),
-        playing: is_playing.current,
+        playing:is_playing.current,
         global_timestamp: get_global_time(correction.current),
         client_uid: get_jwt().substring(37,70)
       }
@@ -217,33 +217,35 @@ const Room = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen border rounded shadow">
-      <input 
-        type="file" 
-        className="mb-4"
-        onChange={handleVideoUpload} 
-      />
-      {videoFilePath && (
-        <div className="w-full max-w-lg">
-          <ReactPlayer 
-            ref={playerRef}
-            onSeek={handle_seek}//SEEK EVENT GETTER
-            onPause={handle_pause}
-            onPlay={handle_play}
-            url={videoFilePath} 
-            width="100%"
-            height="100%" 
-            controls={true} 
-            playing = {playPause}
-            onReady={onLoad}
+    <div className="flex h-screen border rounded shadow">
+      <div className="flex-1 flex flex-row">
+        <div className="p-4">
+          <input 
+            type="file" 
+            className="mb-4"
+            onChange={handleVideoUpload} 
           />
+          {videoFilePath && (
+            <div className="relative" style={{ paddingTop: '0%', width: '100%' }}>
+              <ReactPlayer 
+                ref={playerRef}
+                onSeek={handle_seek}//SEEK EVENT GETTER
+                onPause={handle_pause}
+                onPlay={handle_play}
+                url={videoFilePath} 
+                className="absolute top-0 left-0 w-full h-full"
+                playing={playPause}
+                controls={true} 
+                onReady={onLoad}
+              />
+            </div>
+          )}
         </div>
-      )}
-      <div className="w-1/4 bg-gray-200 overflow-y-auto">
-        <Userlist user_list =  {users}/>
+        <div className="overflow-y-auto pt-5">
+          <Userlist user_list={users}/>
+        </div>
       </div>
-    </div>
-  );
+    </div>     );
 };
 
 export default Room;
