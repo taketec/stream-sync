@@ -59,7 +59,7 @@ const Room = () => {
   []); 
 
   const setVideoState = (state)=>{
-    console.log('got a new state update')
+    if (playerRef){
     lastUpdated.current = get_global_time()
     let proposed_time = (state.playing) ? ((state.video_timestamp - state.global_timestamp) + get_global_time(correction.current) ) : (state.video_timestamp)
     let gap = Math.abs(proposed_time - playerRef.current.getCurrentTime())
@@ -84,8 +84,9 @@ const Room = () => {
         playerRef.current.seekTo(proposed_time, 'seconds')
       
       }
-    }
+    }}
   }
+
   useEffect(() => {
     const socket_listen = async() => {
       socket = io('http://localhost:8000')
