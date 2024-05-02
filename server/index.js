@@ -79,8 +79,9 @@ io.on('connection', (socket) => {
           console.log(`User ${socket.id} is already in room ${room}`);
     }
     console.log(`user ${rooms_state[room].users[socket.id]} joined ${room} `)
-    console.table(rooms_state[room])//all the code till now just manages the users state in the global room_state object, and after this the user joins he room
+    console.table(rooms_state[room].users)//all the code till now just manages the users state in the global room_state object, and after this the user joins he room
     socket.join(room);
+    io.to(room).emit('userlist_update', Object.values(rooms_state[room].users))
   });
 
   socket.on('explicit_state_request', (room) => {
@@ -114,6 +115,7 @@ io.on('connection', (socket) => {
 
     //socket.to(e[1]).emit('user_left_room' , rooms_state[e[1]].users[e[0]])
     delete rooms_state[e[1]].users[e[0]]; 
+    io.to(e[1]).emit('userlist_update', Object.values(rooms_state[e[1]].users))
     //logic to remove the user from the room 
     console.table(rooms_state[e[1]])
   };
