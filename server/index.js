@@ -69,7 +69,7 @@ io.on('connection', (socket) => {
         //client_uid: get_jwt().substring(37,70)
       }
 
-      rooms_state[room] = { users:[], state:blank_state}; //adding default room state to a room if it doesnt already exist
+      rooms_state[room] = {users:[], state:blank_state}; //adding default room state to a room if it doesnt already exist
     }
 
     if (rooms_state[room].users[socket.id] == undefined) { // check if the user is already in the room
@@ -85,6 +85,18 @@ io.on('connection', (socket) => {
   });
 
   socket.on('explicit_state_request', (room) => {
+    if (rooms_state[room] == undefined){
+      console.log('new room created')
+      let blank_state = {
+        video_timestamp : 0.0,
+        lastUpdated : get_time(),
+        playing:false,
+        global_timestamp: get_time(),
+        //client_uid: get_jwt().substring(37,70)
+      }
+
+      rooms_state[room] = {users:[], state:blank_state}; //adding default room state to a room if it doesnt already exist
+    }
     socket.emit('state_update_from_server',rooms_state[room].state)
   })
   

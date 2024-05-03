@@ -197,10 +197,18 @@ const Room = () => {
     }else{console.log(`ignored play state update event event due to it being a result of unwanted event being fired, last updated = ${lastUpdated.current}`)}
 
   } 
-  const handle_seek = (seconds) => {
+  const  handle_seek = async(seconds) => {
     if (get_global_time() - lastUpdated.current > THRESH_IGNORANCE_SEEK ){
+      let timestamp;
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          timestamp = playerRef.current.getCurrentTime();
+          resolve();
+        }, 50); // gives time before the seek event, thus the delay is needed
+      });
+      
       let state_image = {
-        video_timestamp : seconds,//not using ref becuase its buggy, gives time before the seek event, the onSeek callback is built for this. 
+        video_timestamp : seconds-0.05,//removing the delay 
         lastUpdated : get_global_time(correction.current),
         playing:is_playing.current,
         global_timestamp: get_global_time(correction.current),
@@ -209,6 +217,7 @@ const Room = () => {
       socket.emit("state_update_from_client",{room : roomId ,state: state_image})
     }else{console.log(`ignored seek event due to it being a result of unwanted event being fired, last updated = ${lastUpdated.current}`)}
   };
+  
   const onLoad = () =>{
     if (get_global_time() - lastUpdated.current > 0.2 ){//need this condition for some buggy event firing, onReady gets called everytime when playing is changed 
       socket.emit('explicit_state_request',roomId)
@@ -225,14 +234,14 @@ const Room = () => {
             className="mb-4"
             onChange={handleVideoUpload} 
           />
-          {videoFilePath && (
+          {(
             <div className="relative" style={{ paddingTop: '0%', width: '100%' }}>
               <ReactPlayer 
                 ref={playerRef}
                 onSeek={handle_seek}//SEEK EVENT GETTER
                 onPause={handle_pause}
                 onPlay={handle_play}
-                url={videoFilePath} 
+                url='https://www.youtube.com/watch?v=gU-8U7Z-E64'
                 className="absolute top-0 left-0 w-full h-full"
                 playing={playPause}
                 controls={true} 
