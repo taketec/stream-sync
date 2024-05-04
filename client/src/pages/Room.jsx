@@ -71,13 +71,12 @@ const Room = () => {
     console.log(proposed_time)
 
     is_playing.current = state.playing
-
+    console.log(`#############################playing set to ${state.playing} `)
     if (state.playing){
       if(gap > PLAYING_THRESH){
         // tolerance while the video is playing
         playerRef.current.seekTo(proposed_time, 'seconds')
       }
-      
       setPlayPause(state.playing)
     }
     else{
@@ -148,7 +147,7 @@ const Room = () => {
   //this whole thing runs a bit weird in react strict mode, since the useeffect is ran twice it results in the whole process done twice
   useEffect(()=>{
     const do_time_sync = async() =>{
-      for(let i = 0; i <  10; i++){
+      for(let i = 0; i <  1; i++){
         await timeout(1000)
         do_time_sync_one_cycle_backward()
         await timeout(1000)
@@ -197,9 +196,10 @@ const Room = () => {
     }else{console.log(`ignored play state update event event due to it being a result of unwanted event being fired, last updated = ${lastUpdated.current}`)}
 
   } 
-  const  handle_seek = async(seconds) => {
+  const handle_seek = async(seconds) => {
     if (get_global_time() - lastUpdated.current > THRESH_IGNORANCE_SEEK ){
       let timestamp;
+      console.log('on seek called')
       await new Promise((resolve) => {
         setTimeout(() => {
           timestamp = playerRef.current.getCurrentTime();
@@ -215,6 +215,14 @@ const Room = () => {
         client_uid: get_jwt().substring(37,70)
       }
       socket.emit("state_update_from_client",{room : roomId ,state: state_image})
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          console.log('this is the post seek update')
+          socket.emit('explicit_state_request',roomId)
+          resolve();
+        }, 4000); // gives time before the seek event, thus the delay is needed
+      });
+
     }else{console.log(`ignored seek event due to it being a result of unwanted event being fired, last updated = ${lastUpdated.current}`)}
   };
   
@@ -226,35 +234,37 @@ const Room = () => {
   }
 
   return (
-    <div className="flex h-screen border rounded shadow">
-      <div className="flex-1 flex flex-row">
-        <div className="p-4">
-          <input 
-            type="file" 
-            className="mb-4"
-            onChange={handleVideoUpload} 
-          />
-          {(
-            <div className="relative" style={{ paddingTop: '0%', width: '100%' }}>
-              <ReactPlayer 
-                ref={playerRef}
-                onSeek={handle_seek}//SEEK EVENT GETTER
-                onPause={handle_pause}
-                onPlay={handle_play}
-                url='https://www.youtube.com/watch?v=gU-8U7Z-E64'
-                className="absolute top-0 left-0 w-full h-full"
-                playing={playPause}
-                controls={true} 
-                onReady={onLoad}
-              />
-            </div>
-          )}
-        </div>
-        <div className="overflow-y-auto pt-5">
-          <Userlist user_list={users}/>
+      <div className="flex h-screen border rounded shadow">
+        <div className="flex-1 flex flex-row">
+          <div className="p-4 flex-1">
+            <input 
+              type="file" 
+              className="mb-4"
+              onChange={handleVideoUpload} 
+            />
+            {(
+              <div className="relative" style={{ paddingTop: '0%', width: '100%' }}>
+                <ReactPlayer 
+                  ref={playerRef}
+                  onSeek={handle_seek}//SEEK EVENT GETTER
+                  onPause={handle_pause}
+                  onPlay={handle_play}
+                  onBufferEnd={handle_play}
+                  url='https://www.youtube.com/watch?v=gU-8U7Z-E64'
+                  className="absolute top-0 left-0 w-full h-full"
+                  playing={playPause}
+                  controls={true} 
+                  onReady={onLoad}
+                />
+              </div>
+            )}
+          </div>
+          <div className="overflow-y-auto pt-5" style={{ flex: '0 0 auto' }}>
+            <Userlist user_list={users}/>
+          </div>
         </div>
       </div>
-    </div>     );
+    );
 };
 
 export default Room;
