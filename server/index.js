@@ -50,16 +50,16 @@ function get_time(){
 	// delta is the correction parameter
 	return t
 }
-
-io.use((socket, next) => {
-  // Delay in milliseconds (adjust as needed)
-  const delay = 500; // 2 seconds delay
+//simulate delay
+// io.use((socket, next) => {
+//   // Delay in milliseconds (adjust as needed)
+//   const delay = 500; // 2 seconds delay
   
-  // Simulate delay before proceeding
-  setTimeout(() => {
-    next();
-  }, delay);
-});
+//   // Simulate delay before proceeding
+//   setTimeout(() => {
+//     next();
+//   }, delay);
+// });
 
 let rooms_state = {}  
 let socket_user_map = {}
@@ -71,6 +71,8 @@ io.on('connection', (socket) => {
     if (rooms_state[room] == undefined){
       console.log('new room created')
       let blank_state = {
+        media : 'file',
+        url: null,
         video_timestamp : 0.0,
         lastUpdated : get_time(),
         playing:false,

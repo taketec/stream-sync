@@ -16,7 +16,7 @@ const YouTubeMedia = (props) => {
   let roomId = props.room
   let correction = props.correction
   const [inputValue, setInputValue] = useState('');
-  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/watch?v=gU-8U7Z-E64');
+  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
 
   const playerRef = useRef(null);
 
@@ -61,6 +61,7 @@ const YouTubeMedia = (props) => {
   }
 
   useEffect(()=>{
+    console.log('in youtube')
     const socket_listen = () => {
         if (props.socket){
         props.socket.on('state_update_from_server',setVideoState)
@@ -170,7 +171,7 @@ const YouTubeMedia = (props) => {
 
 
     return(
-      <div className="flex flex-col items-center w-full"> {/* Parent div */}
+      <div className="flex flex-col items-center w-full m-2 "> {/* Parent div */}
         <div className="relative" style={{ paddingTop: '1%', width: '100%' }}>
           <form onSubmit={handleVideoChange}>
             <div className="m-0">

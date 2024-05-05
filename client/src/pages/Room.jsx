@@ -3,9 +3,10 @@ import { useParams } from 'react-router-dom';
 import io from "socket.io-client"
 import { useNavigate } from 'react-router-dom';
 import { validUser } from '../apis/auth';
-import {get_global_time, median, timeout} from '../utils'
+import {get_global_time, median, timeout,get_jwt} from '../utils'
 import Userlist from '../components/UsersList';
 import YoutubeMedia from '../components/YoutubeMedia';
+import TestMedia from '../components/TestMedia';
 
 let socket
 
@@ -13,7 +14,6 @@ let socket
 //let TEMP_URL = `https://rr2---sn-i5uif5t-2o9l.googlevideo.com/videoplayback?expire=1714277406&ei=vnctZsyrD8Dlz7sPvvqgMA&ip=116.75.30.244&id=o-AJfpBMoiQhwvIrm0adn0w17ZGIWC7IO2af74g-_2LEDY&itag=22&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&mh=CG&mm=31%2C29&mn=sn-i5uif5t-2o9l%2Csn-gwpa-qxa6&ms=au%2Crdu&mv=m&mvi=2&pl=22&gcr=in&initcwndbps=1453750&bui=AWRWj2RtyyTRuxLiITjVeDbfpbuM2n8_rz9p2W5krbbSmVNb8JO9IUMk_STh8ce5Hi7i_h_U202QT4kA&spc=UWF9f9tRwoXxBei2OPalfjRMKeinzk4SgI7COEcHwnWby-ZhVmRd3JXiXQui&vprv=1&svpuc=1&mime=video%2Fmp4&ns=494aXBfI6v6IaDlKgzNkMHUQ&cnr=14&ratebypass=yes&dur=164.606&lmt=1661553915691651&mt=1714255501&fvip=7&c=WEB&sefc=1&txp=6318224&n=Y0jPXFmaEyhch9F3lq&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cgcr%2Cbui%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Ccnr%2Cratebypass%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AHWaYeowRQIgdzqSdW-fiGQuj_LH7QKwRYraH2sHTllYQtmzISx96UMCIQDmVb8srTDfaJlS_i5pP8fjnbu3YUZygFDA0QCxtLzcvg%3D%3D&sig=AJfQdSswRAIgQHgXQe-qPgqVG0d1ROZ4Rn40hYKCMZt0tAYxmCh87h4CIDTc5BkddNQWEnXo_A2rBzQZ_PiRQJJgB4DhWceZFGi7`
 const Room = () => {
 
-  
   const [currentSocket,setSocket] = useState(null)
 
   const [users, setUsers] = useState([]);
@@ -27,7 +27,7 @@ const Room = () => {
   const under_estimate = useRef(0)//i could have gotten away all these variables in the useeffect directly, but i like it this because of its simplicity and for any future modifications
   const [correction , setCorrection] = useState(0.0)
 
-
+  const [selectedTab, setSelectedTab] = useState(null); 
   
   const navigate = useNavigate();
 
@@ -68,7 +68,18 @@ const Room = () => {
         navigate('/login')
       }
       socket.emit('join_room', {room:roomId,username:username});
-  
+      
+      socket.emit('explicit_state_request',roomId)
+      
+      socket.on('state_update_from_server',(state)=>{
+        if(state.media!=selectedTab){
+
+          setSelectedTab(state.media)
+        
+        }
+      })
+
+
       socket.on('user_left_room' , (user) => {
         console.log(`user ${user} left room`)
       })
@@ -126,21 +137,60 @@ const Room = () => {
 
   useEffect(() => console.log(roomId),[roomId])//logs room id
 
+  useEffect(() => console.log(selectedTab),[selectedTab])//logs room id
 
+
+  const handleTabChange = (tabIndex) => {
+    // Update the selected tab locally
+    setSelectedTab(tabIndex);
+    let state_image = {
+      media : tabIndex,
+      url : null,
+      video_timestamp : 0,//removing the delay 
+      lastUpdated : get_global_time(correction),
+      playing:false,
+      global_timestamp: get_global_time(correction),
+      client_uid: get_jwt().substring(37,70)
+    }
+
+    socket.emit('state_update_from_client', {room : roomId ,state: state_image});
+  };
 
 
   return (
       <div className="flex h-screen border rounded shadow">
-        <div className="flex-1 flex flex-row">
-          <div className="p-4 flex-1">
-          </div>
-          {socket && <YoutubeMedia socket = {currentSocket} room = {roomId} correction = {correction}/>}
-          <div className="overflow-y-auto pt-5" style={{ flex: '0 0 auto' }}>
-            <Userlist user_list={users}/>
+        <div className="flex-1 flex flex-col">
+          {socket && (
+            <nav>
+            <ul className="flex">
+              <li className="mr-2">
+                <button onClick={() => handleTabChange('youtube')} className="m-2 my-2 px-2 py-1 rounded-lg bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20">
+                  Youtube
+                </button>
+              </li>
+              <li className="ml-4">
+                <button onClick={() => handleTabChange('file')} className="m-2 my-2 px-2 py-1 rounded-lg bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20">
+                  File
+                </button>
+              </li>
+              {/* Add more buttons for other tabs */}
+            </ul>
+          </nav>            
+          )}
+          <div className="flex-1">
+            {selectedTab && socket && (
+              <>
+                {selectedTab === 'youtube' && <YoutubeMedia socket={currentSocket} room={roomId} correction={correction} />}
+                {selectedTab === 'file' && <TestMedia socket={currentSocket} room={roomId} correction={correction} />}
+              </>
+            )}
           </div>
         </div>
+        <div className="overflow-y-auto pt-5" style={{ flex: '0 0 auto' }}>
+          <Userlist user_list={users}/>
+        </div>
       </div>
-    );
+);
 };
 
 export default Room;
