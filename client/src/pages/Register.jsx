@@ -20,7 +20,7 @@ const Register = () => {
     if (data?.token) {
       localStorage.setItem("userToken", data.token);
       setIsLoading(false);
-      navigate("/room");
+      navigate("/room/123");
     } else {
       setIsLoading(false);
       if (error) {
