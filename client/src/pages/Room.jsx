@@ -6,7 +6,7 @@ import { validUser } from '../apis/auth';
 import {get_global_time, median, timeout,get_jwt} from '../utils'
 import Userlist from '../components/UsersList';
 import YoutubeMedia from '../components/YoutubeMedia';
-import TestMedia from '../components/TestMedia';
+import FileMedia from '../components/FileMedia';
 
 let socket
 
@@ -179,7 +179,7 @@ const Room = () => {
             {selectedTab && socket && (
               <>
                 {selectedTab === 'youtube' && <YoutubeMedia socket={currentSocket} room={roomId} correction={correction} />}
-                {selectedTab === 'file' && <TestMedia socket={currentSocket} room={roomId} correction={correction} />}
+                {selectedTab === 'file' && <FileMedia socket={currentSocket} room={roomId} correction={correction} />}
               </>
             )}
           </div>
