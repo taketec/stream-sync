@@ -14,7 +14,7 @@ mongoDBConnect();
 
 const app = express();
 const corsConfig = {
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000','http://192.168.1.4:3000'],
   credentials: true,
 };
 
@@ -40,7 +40,7 @@ const server = app.listen(PORT, () => {
 const io = new Server.Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000','http://192.168.1.4:3000'],
   },
 });
 
@@ -51,6 +51,15 @@ function get_time(){
 	return t
 }
 
+io.use((socket, next) => {
+  // Delay in milliseconds (adjust as needed)
+  const delay = 500; // 2 seconds delay
+  
+  // Simulate delay before proceeding
+  setTimeout(() => {
+    next();
+  }, delay);
+});
 
 let rooms_state = {}  
 let socket_user_map = {}
@@ -88,6 +97,8 @@ io.on('connection', (socket) => {
     if (rooms_state[room] == undefined){
       console.log('new room created')
       let blank_state = {
+        media : 'file',
+        url: null,
         video_timestamp : 0.0,
         lastUpdated : get_time(),
         playing:false,
@@ -126,7 +137,9 @@ io.on('connection', (socket) => {
     console.log(e)
 
     //socket.to(e[1]).emit('user_left_room' , rooms_state[e[1]].users[e[0]])
+    if(rooms_state[e[1]].users[e[0]]){
     delete rooms_state[e[1]].users[e[0]]; 
+  }
     io.to(e[1]).emit('userlist_update', Object.values(rooms_state[e[1]].users))
     //logic to remove the user from the room 
     console.table(rooms_state[e[1]])

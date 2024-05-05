@@ -17,7 +17,12 @@ const PAUSED_THRESH = 0.01
 
 //let TEMP_URL = `https://rr2---sn-i5uif5t-2o9l.googlevideo.com/videoplayback?expire=1714277406&ei=vnctZsyrD8Dlz7sPvvqgMA&ip=116.75.30.244&id=o-AJfpBMoiQhwvIrm0adn0w17ZGIWC7IO2af74g-_2LEDY&itag=22&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&mh=CG&mm=31%2C29&mn=sn-i5uif5t-2o9l%2Csn-gwpa-qxa6&ms=au%2Crdu&mv=m&mvi=2&pl=22&gcr=in&initcwndbps=1453750&bui=AWRWj2RtyyTRuxLiITjVeDbfpbuM2n8_rz9p2W5krbbSmVNb8JO9IUMk_STh8ce5Hi7i_h_U202QT4kA&spc=UWF9f9tRwoXxBei2OPalfjRMKeinzk4SgI7COEcHwnWby-ZhVmRd3JXiXQui&vprv=1&svpuc=1&mime=video%2Fmp4&ns=494aXBfI6v6IaDlKgzNkMHUQ&cnr=14&ratebypass=yes&dur=164.606&lmt=1661553915691651&mt=1714255501&fvip=7&c=WEB&sefc=1&txp=6318224&n=Y0jPXFmaEyhch9F3lq&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cgcr%2Cbui%2Cspc%2Cvprv%2Csvpuc%2Cmime%2Cns%2Ccnr%2Cratebypass%2Cdur%2Clmt&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AHWaYeowRQIgdzqSdW-fiGQuj_LH7QKwRYraH2sHTllYQtmzISx96UMCIQDmVb8srTDfaJlS_i5pP8fjnbu3YUZygFDA0QCxtLzcvg%3D%3D&sig=AJfQdSswRAIgQHgXQe-qPgqVG0d1ROZ4Rn40hYKCMZt0tAYxmCh87h4CIDTc5BkddNQWEnXo_A2rBzQZ_PiRQJJgB4DhWceZFGi7`
 const Room = () => {
-  const [videoFilePath, setVideoFilePath] = useState(null);
+
+  const [inputValue, setInputValue] = useState('');
+  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/watch?v=gU-8U7Z-E64');
+  
+  const [currentSocket,setSocket] = useState(null)
+
   const [users, setUsers] = useState([]);
 
   //const [timestamp, setTimestamp] = useState('');
@@ -29,7 +34,7 @@ const Room = () => {
   const under_estimates = useRef([])
   const over_estimate = useRef(0)
   const under_estimate = useRef(0)//i could have gotten away with just keeping the correction as a ref value and declaring other variables in the useeffect directly, but i like it this because of its simplicity and for any future modifications
-  const correction = useRef(0)
+  const [correction , setCorrection] = useState(0.0)
 
   const is_playing  = useRef(false)
 
@@ -63,8 +68,14 @@ const Room = () => {
 
   const setVideoState = (state)=>{
     if (playerRef.current){
+    
+    if (state.url !== videoUrl){
+      setVideoUrl(state.url)
+
+    } 
+    
     lastUpdated.current = get_global_time()
-    let proposed_time = (state.playing) ? ((state.video_timestamp - state.global_timestamp) + get_global_time(correction.current) ) : (state.video_timestamp)
+    let proposed_time = (state.playing) ? ((state.video_timestamp - state.global_timestamp) + get_global_time(correction) ) : (state.video_timestamp)
     let gap = Math.abs(proposed_time - playerRef.current.getCurrentTime())
     
     console.log(`%cGap was ${gap}`, 'font-size:12px; color:purple')
@@ -91,7 +102,8 @@ const Room = () => {
 
   useEffect(() => {
     const socket_listen = async() => {
-      socket = io('http://localhost:8000')
+      socket = io('http://192.168.1.4:8000')
+      setSocket(socket)
       const response = await validUser();
       let username
       try{
@@ -112,18 +124,18 @@ const Room = () => {
         let under_estimate_latest =  time_at_server - get_global_time(0)
         under_estimates.current.push(under_estimate_latest)	
         under_estimate.current = median(under_estimates.current)
-        correction.current = (under_estimate.current + over_estimate.current)/2		
+        setCorrection((under_estimate.current + over_estimate.current)/2)		
         console.log(`%c Updated val for under_estimate is ${under_estimate.current}`, "color:green")
-        console.log(`%c New correction time is ${correction.current} seconds`, 'color:purple; font-size:12px')
+        console.log(`%c New correction time is ${correction} seconds`, 'color:purple; font-size:12px')
       })
       
       socket.on("time_sync_response_forward", (calculated_diff)=>{
         let over_estimate_latest = calculated_diff
         over_estimates.current.push(over_estimate_latest)	
         over_estimate.current = median(over_estimates.current)
-        correction.current = (under_estimate.current + over_estimate.current)/2		
+        setCorrection((under_estimate.current + over_estimate.current)/2) 	
         console.log(`%c Updated val for over_estimate is ${over_estimate.current}`, "color:green")
-        console.log(`%c New correction time is ${correction.current} seconds`, 'color:purple; font-size:12px')
+        console.log(`%c New correction time is ${correction} seconds`, 'color:purple; font-size:12px')
       })
       
       socket.on('userlist_update',(userlist)=>{
@@ -147,7 +159,7 @@ const Room = () => {
   //this whole thing runs a bit weird in react strict mode, since the useeffect is ran twice it results in the whole process done twice
   useEffect(()=>{
     const do_time_sync = async() =>{
-      for(let i = 0; i <  1; i++){
+      for(let i = 0; i <  5; i++){
         await timeout(1000)
         do_time_sync_one_cycle_backward()
         await timeout(1000)
@@ -161,8 +173,23 @@ const Room = () => {
   useEffect(() => console.log(roomId),[roomId])//logs room id
   useEffect(() => {console.log('playing set to -> ',playPause)},[playPause])//logs playing/pausing state
 
-  const handleVideoUpload = (event) => {
-    setVideoFilePath(URL.createObjectURL(event.target.files[0]));
+  const handleVideoChange = (e) => {
+    e.preventDefault();
+    setVideoUrl(inputValue);
+    is_playing.current = false
+    let state_image = {
+      media : 'youtube',
+      url : inputValue,
+      video_timestamp : 0,//removing the delay 
+      lastUpdated : get_global_time(correction),
+      playing:false,
+      global_timestamp: get_global_time(correction),
+      client_uid: get_jwt().substring(37,70)
+    }
+    socket.emit("state_update_from_client",{room : roomId ,state: state_image})
+
+
+    setInputValue('');
   };
 
 
@@ -171,10 +198,12 @@ const Room = () => {
     is_playing.current = false
     if (get_global_time() - lastUpdated.current > THRESH_IGNORANCE ){
       let state_image = {
+        media : 'youtube',
+        url : videoUrl,  
         video_timestamp : playerRef.current.getCurrentTime(),
-        lastUpdated : get_global_time(correction.current),
+        lastUpdated : get_global_time(correction),
         playing:false,
-        global_timestamp: get_global_time(correction.current),
+        global_timestamp: get_global_time(correction),
         client_uid: get_jwt().substring(37,70)
       }
       //console.log(`########### room-id ################ ${roomId}`)
@@ -186,10 +215,12 @@ const Room = () => {
     is_playing.current = true
     if (get_global_time() - lastUpdated.current > THRESH_IGNORANCE ){
       let state_image = {
+        media : 'youtube',
+        url : videoUrl,  
         video_timestamp : playerRef.current.getCurrentTime(),
-        lastUpdated : get_global_time(correction.current),
+        lastUpdated : get_global_time(correction),
         playing:true,
-        global_timestamp: get_global_time(correction.current),
+        global_timestamp: get_global_time(correction),
         client_uid: get_jwt().substring(37,70)
       }
       socket.emit("state_update_from_client",{room : roomId ,state: state_image})
@@ -208,10 +239,12 @@ const Room = () => {
       });
       
       let state_image = {
+        media : 'youtube',
+        url : videoUrl,  
         video_timestamp : seconds-0.05,//removing the delay 
-        lastUpdated : get_global_time(correction.current),
+        lastUpdated : get_global_time(correction),
         playing:is_playing.current,
-        global_timestamp: get_global_time(correction.current),
+        global_timestamp: get_global_time(correction),
         client_uid: get_jwt().substring(37,70)
       }
       socket.emit("state_update_from_client",{room : roomId ,state: state_image})
@@ -237,11 +270,23 @@ const Room = () => {
       <div className="flex h-screen border rounded shadow">
         <div className="flex-1 flex flex-row">
           <div className="p-4 flex-1">
-            <input 
-              type="file" 
-              className="mb-4"
-              onChange={handleVideoUpload} 
-            />
+          <div className="my-4"> 
+          <form onSubmit={handleVideoChange}>
+            <div className="m-0">
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Enter only valid url"
+              />
+            </div>
+            <button 
+            type="submit"
+            className={`my-2 px-2 py-1 rounded-lg bg-blue-500 text-white text-sm font-medium hover:bg-blue-700`}>
+              Submit
+            </button>
+          </form>
+          </div>
             {(
               <div className="relative" style={{ paddingTop: '0%', width: '100%' }}>
                 <ReactPlayer 
@@ -250,7 +295,7 @@ const Room = () => {
                   onPause={handle_pause}
                   onPlay={handle_play}
                   onBufferEnd={handle_play}
-                  url='https://www.youtube.com/watch?v=gU-8U7Z-E64'
+                  url={videoUrl}
                   className="absolute top-0 left-0 w-full h-full"
                   playing={playPause}
                   controls={true} 
