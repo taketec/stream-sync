@@ -24,7 +24,7 @@ const Room = () => {
   const over_estimates = useRef([])
   const under_estimates = useRef([])
   const over_estimate = useRef(0)
-  const under_estimate = useRef(0)//i could have gotten away with just keeping the correction as a ref value and declaring other variables in the useeffect directly, but i like it this because of its simplicity and for any future modifications
+  const under_estimate = useRef(0)//i could have gotten away all these variables in the useeffect directly, but i like it this because of its simplicity and for any future modifications
   const [correction , setCorrection] = useState(0.0)
 
 
