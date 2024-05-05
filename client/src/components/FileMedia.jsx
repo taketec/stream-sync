@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
-import {get_global_time, median, timeout, get_jwt} from '../utils'
+import {get_global_time, get_jwt} from '../utils'
 
 
 const THRESH_IGNORANCE = 0.2
