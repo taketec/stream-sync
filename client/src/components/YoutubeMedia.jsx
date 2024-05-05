@@ -13,7 +13,6 @@ const PAUSED_THRESH = 0.01
 
 
 const YouTubeMedia = (props) => {
-  let socket
   let roomId = props.room
   let correction = props.correction
   const [inputValue, setInputValue] = useState('');
@@ -63,11 +62,10 @@ const YouTubeMedia = (props) => {
 
   useEffect(()=>{
     const socket_listen = () => {
-        socket = props.socket
-        if (socket){
-        socket.on('state_update_from_server',setVideoState)
+        if (props.socket){
+        props.socket.on('state_update_from_server',setVideoState)
         return () => {
-          socket.off('state_update_from_server');
+          props.socket.off('state_update_from_server');
         };
       }else{console.log('socket was null')}}
       socket_listen()
