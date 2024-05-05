@@ -16,7 +16,7 @@ const YouTubeMedia = (props) => {
   let roomId = props.room
   let correction = props.correction
   const [inputValue, setInputValue] = useState('');
-  const [videoUrl, setVideoUrl] = useState('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+  const [videoUrl, setVideoUrl] = useState(null);
 
   const playerRef = useRef(null);
 
@@ -61,10 +61,10 @@ const YouTubeMedia = (props) => {
   }
 
   useEffect(()=>{
-    console.log('in youtube')
     const socket_listen = () => {
         if (props.socket){
         props.socket.on('state_update_from_server',setVideoState)
+        props.socket.emit('explicit_state_request',roomId)
         return () => {
           props.socket.off('state_update_from_server');
         };
