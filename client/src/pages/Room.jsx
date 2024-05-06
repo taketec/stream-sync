@@ -57,7 +57,7 @@ const Room = () => {
 
   useEffect(() => {
     const socket_listen = async() => {
-      socket = io('http://192.168.1.4:8000')
+      socket = io('http://localhost:8000')
       const response = await validUser();
       let username
       try{
@@ -71,7 +71,7 @@ const Room = () => {
       socket.emit('explicit_state_request',roomId)
       
       socket.on('state_update_from_server',(state)=>{
-        if(state.media!=selectedTab){
+        if(state.media!==selectedTab){
 
           setSelectedTab(state.media)
         
@@ -140,6 +140,8 @@ const Room = () => {
 
 
   const handleTabChange = (tabIndex) => {
+    if(tabIndex!==selectedTab){
+
     // Update the selected tab locally
     setSelectedTab(tabIndex);
     let state_image = {
@@ -153,6 +155,7 @@ const Room = () => {
     }
 
     socket.emit('state_update_from_client', {room : roomId ,state: state_image});
+  }
   };
 
 

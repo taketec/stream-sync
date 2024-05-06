@@ -3,12 +3,12 @@ import axios from 'axios';
 
 const API = (token) =>
   axios.create({
-    baseURL: 'http://192.168.1.4:8000',
+    baseURL: 'http://localhost:8000',
     headers: { Authorization: token },
   });
 
 
-let url = 'http://192.168.1.4:8000';
+let url = 'http://localhost:8000';
 
 export const loginUser = async (body) => {
   try {
