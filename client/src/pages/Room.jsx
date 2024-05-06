@@ -179,7 +179,7 @@ const Room = () => {
           </nav>            
           )}
           <div className="flex-1">
-            {selectedTab && socket && (
+            {selectedTab && currentSocket && (
               <>
                 {selectedTab === 'youtube' && <YoutubeMedia socket={currentSocket} roomId={roomId} correction={correction} />}
                 {selectedTab === 'file' && <FileMedia socket={currentSocket} roomId={roomId} correction={correction} />}
