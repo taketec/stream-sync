@@ -62,11 +62,9 @@ function get_time(){
 // });
 
 let rooms_state = {}  
-let socket_user_map = {}
 io.on('connection', (socket) => {
 
   socket.on('join_room', ({room:room,username:username}) => {
-    socket_user_map[socket.id] = username//store username-socketid link 
 
     if (rooms_state[room] == undefined){
       console.log('new room created')

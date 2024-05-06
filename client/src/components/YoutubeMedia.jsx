@@ -12,9 +12,7 @@ const PAUSED_THRESH = 0.01
 
 
 
-const YouTubeMedia = (props) => {
-  let roomId = props.room
-  let correction = props.correction
+const YouTubeMedia = ({socket,roomId,correction}) => {
   const [inputValue, setInputValue] = useState('');
   const [videoUrl, setVideoUrl] = useState(null);
 
@@ -62,11 +60,11 @@ const YouTubeMedia = (props) => {
 
   useEffect(()=>{
     const socket_listen = () => {
-        if (props.socket){
-        props.socket.on('state_update_from_server',setVideoState)
-        props.socket.emit('explicit_state_request',roomId)
+        if (socket){
+        socket.on('state_update_from_server',setVideoState)
+        socket.emit('explicit_state_request',roomId)
         return () => {
-          props.socket.off('state_update_from_server');
+          socket.off('state_update_from_server');
         };
       }else{console.log('socket was null')}}
       socket_listen()
@@ -89,7 +87,7 @@ const YouTubeMedia = (props) => {
       global_timestamp: get_global_time(correction),
       client_uid: get_jwt().substring(37,70)
     }
-    props.socket.emit("state_update_from_client",{room : roomId ,state: state_image})
+    socket.emit("state_update_from_client",{room : roomId ,state: state_image})
 
 
     setInputValue('');
@@ -110,7 +108,7 @@ const YouTubeMedia = (props) => {
         client_uid: get_jwt().substring(37,70)
       }
       //console.log(`########### room-id ################ ${roomId}`)
-      props.socket.emit("state_update_from_client",{room : roomId ,state: state_image})
+      socket.emit("state_update_from_client",{room : roomId ,state: state_image})
     }
     else{console.log(`ignored event due to it being a result of unwanted event being fired, last updated = ${lastUpdated.current}`)}
   } 
@@ -126,7 +124,7 @@ const YouTubeMedia = (props) => {
         global_timestamp: get_global_time(correction),
         client_uid: get_jwt().substring(37,70)
       }
-      props.socket.emit("state_update_from_client",{room : roomId ,state: state_image})
+      socket.emit("state_update_from_client",{room : roomId ,state: state_image})
     }else{console.log(`ignored play state update event event due to it being a result of unwanted event being fired, last updated = ${lastUpdated.current}`)}
 
   } 
@@ -150,11 +148,11 @@ const YouTubeMedia = (props) => {
         global_timestamp: get_global_time(correction),
         client_uid: get_jwt().substring(37,70)
       }
-      props.socket.emit("state_update_from_client",{room : roomId ,state: state_image})
+      socket.emit("state_update_from_client",{room : roomId ,state: state_image})
       await new Promise((resolve) => {
         setTimeout(() => {
           console.log('this is the post seek update')
-          props.socket.emit('explicit_state_request',roomId)
+          socket.emit('explicit_state_request',roomId)
           resolve();
         }, 4000); // gives time before the seek event, thus the delay is needed
       });
@@ -164,7 +162,7 @@ const YouTubeMedia = (props) => {
   
   const onLoad = () =>{
     if (get_global_time() - lastUpdated.current > 0.2 ){//need this condition for some buggy event firing, onReady gets called everytime when playing is changed 
-      props.socket.emit('explicit_state_request',roomId)
+      socket.emit('explicit_state_request',roomId)
       console.log('------------------------------- loaded-------------------------------------')
     }
   }

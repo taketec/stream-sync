@@ -178,8 +178,8 @@ const Room = () => {
           <div className="flex-1">
             {selectedTab && socket && (
               <>
-                {selectedTab === 'youtube' && <YoutubeMedia socket={currentSocket} room={roomId} correction={correction} />}
-                {selectedTab === 'file' && <FileMedia socket={currentSocket} room={roomId} correction={correction} />}
+                {selectedTab === 'youtube' && <YoutubeMedia socket={currentSocket} roomId={roomId} correction={correction} />}
+                {selectedTab === 'file' && <FileMedia socket={currentSocket} roomId={roomId} correction={correction} />}
               </>
             )}
           </div>
