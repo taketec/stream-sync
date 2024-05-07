@@ -14,7 +14,7 @@
 /client/build
 
 # misc
-#/server/.env
+/server/.env
 /client/.env
 
 
