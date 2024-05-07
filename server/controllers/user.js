@@ -1,4 +1,4 @@
-import argon2 from "argon2";
+// import argon2 from "argon2";
 import user from '../models/user.js';
 import axios from "axios"
 
@@ -18,28 +18,28 @@ export const register = async (req, res) => {
     res.status(500).json({error:error});
   }
 };
-export const login = async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const valid = await user.findOne({ email });
-    if (!valid) return res.status(404).json({ message: 'User does not exist' }); // Added return here
+// export const login = async (req, res) => {
+//   const { email, password } = req.body;
+//   try {
+//     const valid = await user.findOne({ email });
+//     if (!valid) return res.status(404).json({ message: 'User does not exist' }); // Added return here
 
-    const validPassword = await argon2.verify(valid.password, password);
-    if (!validPassword) {
-      return res.status(401).json({ message: 'Invalid Credentials' }); // Added return here
-    }
+//     const validPassword = await argon2.verify(valid.password, password);
+//     if (!validPassword) {
+//       return res.status(401).json({ message: 'Invalid Credentials' }); // Added return here
+//     }
 
-    const token = await valid.generateAuthToken();
-    await valid.save();
-    res.cookie('userToken', token, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-    return res.status(200).json({ token: token, status: 200 }); // Added return here
-  } catch (error) {
-    return res.status(500).json({ error: error.message }); // Send only error message
-  }
-};
+//     const token = await valid.generateAuthToken();
+//     await valid.save();
+//     res.cookie('userToken', token, {
+//       httpOnly: true,
+//       maxAge: 24 * 60 * 60 * 1000,
+//     });
+//     return res.status(200).json({ token: token, status: 200 }); // Added return here
+//   } catch (error) {
+//     return res.status(500).json({ error: error.message }); // Send only error message
+//   }
+// };
 
 
   export const validUser = async (req, res) => {
