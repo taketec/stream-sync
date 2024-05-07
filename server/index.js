@@ -17,7 +17,7 @@ const corsConfig = {
   //origin: ['http://localhost:3000','http://192.168.1.4:3000'],
   origin: '*',
   credentials: true,
-  methods:['GET','POST',"PUT","PATCH","DELETE"]
+  methods:["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
 };
 
 const createLog = (req, res, next) => {
@@ -30,7 +30,7 @@ const createLog = (req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(createLog)
-app.options("",cors(corsConfig))
+//app.options("",cors(corsConfig))
 app.use(cors(corsConfig));
 app.use('/', userRoutes);
 
@@ -46,7 +46,7 @@ const server = app.listen(PORT, () => {
 const io = new Server.Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: ['http://localhost:3000','http://192.168.1.4:3000'],
+    //origin: ['http://localhost:3000','http://192.168.1.4:3000'],
   },
 });
 
