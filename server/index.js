@@ -17,7 +17,7 @@ const corsConfig = {
   //origin: ['http://localhost:3000','http://192.168.1.4:3000'],
   origin: '*',
   credentials: true,
-  methods:['GET','POST']
+  methods:['GET','POST',"PUT","PATCH","DELETE"]
 };
 
 const createLog = (req, res, next) => {
@@ -30,6 +30,7 @@ const createLog = (req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(createLog)
+app.options("",cors(corsConfig))
 app.use(cors(corsConfig));
 app.use('/', userRoutes);
 
