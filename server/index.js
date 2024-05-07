@@ -31,6 +31,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors(corsConfig));
 app.use('/', userRoutes);
 
+app.get('/', (req, res) => {
+  res.json({ message: "hi humans" });
+});
 
 
 const server = app.listen(PORT, () => {
