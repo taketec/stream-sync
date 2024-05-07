@@ -17,7 +17,6 @@
 /server/.env
 /client/.env
 
-/server/vercel.json
 
 .DS_Store
 .env.local
