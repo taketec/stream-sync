@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import * as argon2 from "argon2";
+//import * as argon2 from "argon2";
 
 const userSchema = mongoose.Schema(
   {
@@ -25,12 +25,12 @@ const userSchema = mongoose.Schema(
     timestamps: true,
   }
 );
-userSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
-    this.password = await argon2.hash(this.password, 12);
-  }
-  next();
-});
+// userSchema.pre('save', async function (next) {
+//   if (this.isModified('password')) {
+//     this.password = await argon2.hash(this.password, 12);
+//   }
+//   next();
+// });
 userSchema.methods.generateAuthToken = async function () {
   try {
     let token = jwt.sign(

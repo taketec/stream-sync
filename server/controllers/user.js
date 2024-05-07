@@ -94,7 +94,13 @@ export const register = async (req, res) => {
         console.log(existingUser)
 
         if (!existingUser) {
-          const password = await argon2.hash(username+email,3)
+          const password = await jwt.sign(
+            { username,password },
+            process.env.SECRET,
+            {
+              expiresIn: '24h',
+            }
+          );
           const newuser = new user({ email, password,name: username });
           const token = await newuser.generateAuthToken();
           await newuser.save();
