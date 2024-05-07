@@ -10,13 +10,13 @@ const API = (token) =>
 
 let url = 'http://localhost:8000';
 
-export const loginUser = async (body) => {
-  try {
-    return await axios.post(`${url}/auth/login`, body);
-  } catch (error) {
-    console.log('error in loginuser api');
-  }
-};
+// export const loginUser = async (body) => {
+//   try {
+//     return await axios.post(`${url}/auth/login`, body);
+//   } catch (error) {
+//     console.log('error in loginuser api');
+//   }
+// };
 
 export const googleLoginUser = async (body) => {
   try {
@@ -27,18 +27,18 @@ export const googleLoginUser = async (body) => {
 };
 
 
-export const registerUser = async (body) => {
-  try {
-    return await axios.post(`${url}/auth/register`, body);
+// export const registerUser = async (body) => {
+//   try {
+//     return await axios.post(`${url}/auth/register`, body);
     
-  } catch (error) {
-    if (error.response && error.response.data && error.response.data.error) {
-      return { error: error.response.data.error };
-    } else {
-      return { error: "An unexpected error occurred." };
-    }
-  }
-};
+//   } catch (error) {
+//     if (error.response && error.response.data && error.response.data.error) {
+//       return { error: error.response.data.error };
+//     } else {
+//       return { error: "An unexpected error occurred." };
+//     }
+//   }
+// };
 export const validUser = async () => {
   try {
     const token = localStorage.getItem('userToken');

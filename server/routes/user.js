@@ -14,8 +14,8 @@ import {
 
 const router = express.Router();
 
-router.post('/auth/register', register);
-router.post('/auth/login', login);
+//router.post('/auth/register', register);
+//router.post('/auth/login', login);
 router.post('/auth/google', googleLogin);
 router.get('/auth/valid', Auth, validUser);
 router.get('/auth/logout', Auth, logout);
