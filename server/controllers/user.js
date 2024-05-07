@@ -77,6 +77,7 @@ export const login = async (req, res) => {
       //   [0]   locale: 'en'
       //   [0] }
       //and then we use it to either make a user or to login a existing one, idk if its safe enough or not.
+      //i asked chatgpt if its safe and it said yes
 
       axios
       .get("https://www.googleapis.com/oauth2/v3/userinfo", {
