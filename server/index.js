@@ -17,6 +17,7 @@ const corsConfig = {
   //origin: ['http://localhost:3000','http://192.168.1.4:3000'],
   origin: '*',
   credentials: true,
+  methods:['GET','POST']
 };
 
 const createLog = (req, res, next) => {
