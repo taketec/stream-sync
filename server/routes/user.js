@@ -5,6 +5,7 @@ import {
     logout,
     searchUsers,
     updateInfo,
+    googleLogin,
     getUserById,
   } from '../controllers/user.js';
   import express from 'express';
@@ -15,6 +16,7 @@ const router = express.Router();
 
 router.post('/auth/register', register);
 router.post('/auth/login', login);
+router.post('/auth/google', googleLogin);
 router.get('/auth/valid', Auth, validUser);
 router.get('/auth/logout', Auth, logout);
 router.get('/api/user?', Auth, searchUsers);

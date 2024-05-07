@@ -1,5 +1,6 @@
 import argon2 from "argon2";
 import user from '../models/user.js';
+import axios from "axios"
 
 
 export const register = async (req, res) => {
@@ -57,45 +58,44 @@ export const login = async (req, res) => {
     }
   };
 
-  // export const googleAuth = async (req, res) => {
-  //   try {
-  //     const { tokenId } = req.body;
-  //     const client = new OAuth2Client(process.env.CLIENT_ID);
-  //     const verify = await client.verifyIdToken({
-  //       idToken: tokenId,
-  //       audience: process.env.CLIENT_ID,
-  //     });
-  //     const { email_verified, email, name, picture } = verify.payload;
-  //     if (!email_verified) res.json({ message: 'Email Not Verified' });
-  //     const userExist = await user.findOne({ email }).select('-password');
-  //     if (userExist) {
-  //       res.cookie('userToken', tokenId, {
-  //         httpOnly: true,
-  //         maxAge: 24 * 60 * 60 * 1000,
-  //       });
-  //       res.status(200).json({ token: tokenId, user: userExist });
-  //     } else {
-  //       const password = email + process.env.CLIENT_ID;
-  //       const newUser = await user({
-  //         name: name,
-  //         profilePic: picture,
-  //         password,
-  //         email,
-  //       });
-  //       await newUser.save();
-  //       res.cookie('userToken', tokenId, {
-  //         httpOnly: true,
-  //         maxAge: 24 * 60 * 60 * 1000,
-  //       });
-  //       res
-  //         .status(200)
-  //         .json({ message: 'User registered Successfully', token: tokenId });
-  //     }
-  //   } catch (error) {
-  //     res.status(500).json({ error: error });
-  //     console.log('error in googleAuth backend' + error);
-  //   }
-  // };
+
+  export const googleLogin = async (req,res) => {
+    try {
+
+      let { token } = req.body
+      console.log(token)
+      axios
+      .get("https://www.googleapis.com/oauth2/v3/userinfo", {
+      headers: {
+          "Authorization": `Bearer ${token}`
+      }
+    })
+      .then(async response => {
+        const username = response.data.name;
+        const email = response.data.email;
+        console.log(response.data)
+
+        const existingUser = await user.findOne({ email });
+        console.log(existingUser)
+
+        if (!existingUser) {
+          const password = await argon2.hash(username+email,3)
+          const newuser = new user({ email, password,name: username });
+          const token = await newuser.generateAuthToken();
+          await newuser.save();
+          return res.json({ message: 'success', token: token });
+        }
+        else{
+          token = await existingUser.generateAuthToken()
+          return res.json({ message: 'success', token: token });
+        }
+      })
+
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
   
   export const logout = (req, res) => {
     req.rootUser.tokens = req.rootUser.tokens.filter((e) => e.token != req.token);
