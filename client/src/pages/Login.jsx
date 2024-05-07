@@ -1,9 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link,useNavigate } from 'react-router-dom'; // For navigation after login
-
-import { loginUser, validUser } from '../apis/auth';
-
+import { loginUser, validUser ,googleLoginUser} from '../apis/auth';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -33,6 +32,28 @@ const Login = () => {
   
       checkAuth();
     }, []); // Run only on component mount
+
+    const googleLogin = useGoogleLogin({
+
+      onSuccess: async(tokenResponse) => {
+        try{
+          console.log('Google login successful', tokenResponse.access_token);
+
+          const response = await googleLoginUser({token:tokenResponse.access_token})
+          let token = response.data.token
+          localStorage.setItem('userToken', token);
+          navigate('/room/123'); 
+        } 
+        catch(error){
+          setErrorMessage(error.response?.data?.message || 'Login failed')
+        }
+      },
+  
+      onError: () => {
+        setErrorMessage('Google login faiied')
+        console.error('Google login failed');
+      }  
+    });
   
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -96,6 +117,13 @@ const Login = () => {
               {isLoading ? 'Logging in...' : 'Login'}
             </button>
           </form>
+
+          <button onClick={() => googleLogin()}>
+
+            Sign in with Google 🚀
+
+          </button>
+
           <div className="flex justify-center mt-8">  {/* Added mt-8 for margin-top */}
             <h1 className="text-xs text-center ">welcome to streamsync 📺</h1>
           </div>        
