@@ -24,3 +24,18 @@ export function median(values){
   export function get_jwt(){
     return localStorage.getItem('userToken');
   }
+
+  export function generate_random_string(length = 3) {
+    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    const segments = [];
+  
+    for (let i = 0; i < length; i++) {
+      let segment = '';
+      for (let j = 0; j < 3; j++) {
+        segment += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      segments.push(segment);
+    }
+  
+    return segments.join('-');
+  }

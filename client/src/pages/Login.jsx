@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { googleLoginUser, validUser } from '../apis/auth';
 import { useGoogleLogin } from '@react-oauth/google';
+import {generate_random_string} from '../utils.js'
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,7 +16,8 @@ const Login = () => {
         if (token) {
           const response = await validUser();
           if (response.token) {
-            navigate('/room/123');
+            let roomId = generate_random_string()
+            navigate(`/room/${roomId}`);
           } else {
             localStorage.removeItem('userToken'); // Clear invalid token
           }
@@ -36,7 +38,8 @@ const Login = () => {
         const response = await googleLoginUser({ token: tokenResponse.access_token });
         let token = response.data.token;
         localStorage.setItem('userToken', token);
-        navigate('/room/123');
+        let roomId = generate_random_string()
+        navigate(`/room/${roomId}`);
       } catch (error) {
         setErrorMessage(error.response?.data?.message || 'Login failed');
       }
