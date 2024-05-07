@@ -14,8 +14,8 @@ mongoDBConnect();
 
 const app = express();
 const corsConfig = {
-  //origin: ['http://localhost:3000','http://192.168.1.4:3000'],
-  origin: '*',
+  origin: ['http://localhost:3000','http://192.168.1.4:3000'],
+  //origin: '*',
   credentials: true,
   methods:['GET','POST',"PUT","PATCH","DELETE"]
 };
