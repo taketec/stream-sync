@@ -64,6 +64,20 @@ export const login = async (req, res) => {
 
       let { token } = req.body
       console.log(token)
+
+      // the request below basically gives you a object like this
+      // {
+      //   [0]   sub: '797750419735279',
+      //   [0]   name: 'Shendra Pandit',
+      //   [0]   given_name: 'Shandra',
+      //   [0]   family_name: 'Pandit',
+      //   [0]   picture: 'https://lh3.googleusercontent.com/a/ACg8ocKOya8vf1PaL34inwDaw1gYkoeHV8MbUTPxOvCEw4EnuC5L0m-o=s96-c',
+      //   [0]   email: 'shailupan93@gmail.com',
+      //   [0]   email_verified: true,
+      //   [0]   locale: 'en'
+      //   [0] }
+      //and then we use it to either make a user or to login a existing one, idk if its safe enough or not.
+
       axios
       .get("https://www.googleapis.com/oauth2/v3/userinfo", {
       headers: {
