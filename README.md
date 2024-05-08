@@ -4,15 +4,15 @@ demo - https://stream-sync-app.onrender.com
 
 previews-
 
-login - 
+#login - 
 ![](https://github.com/taketec/stream-sync/blob/main/previews/login.gif)
 
 
-play from youtube - 
+#play from youtube - 
 ![](https://github.com/taketec/stream-sync/blob/main/previews/youtube.gif)
 
 
-play from file - 
+#play from file - 
 ![](https://github.com/taketec/stream-sync/blob/main/previews/file.gif)
 
 
