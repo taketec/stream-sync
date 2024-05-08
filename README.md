@@ -29,5 +29,5 @@ Later on I needed an excuse to build a web app for learning web dev so i made th
 -adding a create/join room page(like google meet)\
 -adding server side checks on room creations\
 -adding login with forgot password and email verification (i have only kept login with google in the demo, because this wasnt implemented)\
--improving the jwt middleware\
+-improving the jwt middleware
  
