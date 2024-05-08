@@ -1,6 +1,7 @@
 # stream-sync, a wathparty app made in the mern stack
 
 - demo - https://stream-sync-app.onrender.com
+  (if this link doesnt work, just wait for about 50-100 second for the server instance to bootup. It shuts down due to inactivity)
 
 # previews-
 
