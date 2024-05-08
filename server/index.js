@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import mongoDBConnect from './mongodb/connection.js';
+import mongoDBConnect from './mongoDb/connection.js';
 import express from 'express';
 import userRoutes from './routes/user.js';
 import bodyParser from 'body-parser';
@@ -46,7 +46,7 @@ const server = app.listen(PORT, () => {
 const io = new Server.Server(server, {
   pingTimeout: 60000,
   cors: {
-    //origin: ['http://localhost:3000','http://192.168.1.4:3000'],
+    origin: ['http://localhost:3000','https://stream-sync-app.onrender.com'],
   },
 });
 
