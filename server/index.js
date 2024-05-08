@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import mongoDBConnect from './mongoDb/Connection.js';
+import mongoDBConnect from './mongoDb/connection.js';
 import express from 'express';
 import userRoutes from './routes/user.js';
 import bodyParser from 'body-parser';
