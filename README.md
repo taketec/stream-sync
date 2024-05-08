@@ -16,11 +16,11 @@ demo - https://stream-sync-app.onrender.com
 ![](https://github.com/taketec/stream-sync/blob/main/previews/file.gif)
 
 
-I have been wondering about how I can implement a event based video syncronization app myself since a long time. How hard can it be, there are 3 states of a video playing, playing, paused, buffering so it shouldnt be very hard to sync videos on multiple clients without using something like webrtc right? Well... its not really that simple. The need for this arose when some of my friends didnt have very good internet connections to watch videos with webrtc like discord and google meet and thats how I started thinking about it. 
+I have been wondering about how I can implement a event based video syncronization app myself since a long time. How hard can it be, there are 3 states of a video playing, playing, paused, buffering so it shouldnt be very hard to sync videos on multiple clients and not have to use something like webrtc right? Well... its not really that simple. The need for this arose when some of my friends didnt have very good internet connections to watch videos with webrtc like discord and google meet and thats how I started thinking about it. 
 
-Researching upon it I found this article https://levelup.gitconnected.com/tired-of-making-to-do-list-applications-acce875fe617 which explained me exactly what I wanted. This article is is a work of art and the code there is very elegant and neat and kudos to the author for such great work.
+Doing some research upon this I found this really cool article https://levelup.gitconnected.com/tired-of-making-to-do-list-applications-acce875fe617 which explained exactly what I wanted. This article is is a work of art, the code here is very elegant and the research done is very neat, so kudos to the author for such great work.
 
-Later on I needed an excuse to build a web app for learning web dev so i made this app.
+Later on I needed an excuse to build a web app, for learning web dev so I made this app.
 
 
 
@@ -31,4 +31,9 @@ Later on I needed an excuse to build a web app for learning web dev so i made th
 -adding login with forgot password and email verification (i have only kept login with google in the demo, because this wasnt implemented)\
 -improving the jwt middleware\
 -making the fetch username flow better
+
+## Features I will implement later if I have the time and motivation to -
+- Feature to upload video files and stream them with hls in a watch party\
+- making the overall ui/ux better
+- adding dp to the 'users in room' section
  
