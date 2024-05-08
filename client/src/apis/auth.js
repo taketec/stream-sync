@@ -3,12 +3,12 @@ import axios from 'axios';
 
 const API = (token) =>
   axios.create({
-    baseURL: 'https://stream-sync-server-m6gqy966y-taketecs-projects.vercel.app/',
+    baseURL: 'http://localhost:8000',
     headers: { Authorization: token },
   });
 
 
-let url = 'https://stream-sync-server-m6gqy966y-taketecs-projects.vercel.app/';
+let url = 'http://localhost:8000';
 
 // export const loginUser = async (body) => {
 //   try {

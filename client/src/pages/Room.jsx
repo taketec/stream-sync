@@ -57,7 +57,7 @@ const Room = () => {
 
   useEffect(() => {
     const socket_listen = async() => {
-      socket = io('https://stream-sync-server-m6gqy966y-taketecs-projects.vercel.app/')
+      socket = io('http://localhost:8000')
       const response = await validUser();
       let username
       try{

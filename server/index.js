@@ -14,8 +14,8 @@ mongoDBConnect();
 
 const app = express();
 const corsConfig = {
-  //origin: ['http://localhost:3000','http://192.168.1.4:3000'],
-  origin: '*',
+  origin: ['http://localhost:3000','http://192.168.1.4:3000'],
+  //origin: '*',
   credentials: true,
   methods:["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
 };
@@ -30,8 +30,8 @@ const createLog = (req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(createLog)
-app.options("*",cors(corsConfig))
-//app.use(cors(corsConfig));
+//xapp.options("*",cors(corsConfig))
+app.use(cors(corsConfig));
 app.use('/', userRoutes);
 
 app.get('/', (req, res) => {
