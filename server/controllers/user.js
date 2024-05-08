@@ -91,16 +91,17 @@ export const register = async (req, res) => {
         console.log(response.data)
 
         const existingUser = await user.findOne({ email });
-        console.log(existingUser)
 
         if (!existingUser) {
+          console.log("user doesnt exist")
           const password = await jwt.sign(
-            { username,password },
+            { username },
             process.env.SECRET,
             {
               expiresIn: '24h',
             }
           );
+          console.log(password)
           const newuser = new user({ email, password,name: username });
           const token = await newuser.generateAuthToken();
           await newuser.save();
