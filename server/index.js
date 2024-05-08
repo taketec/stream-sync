@@ -29,7 +29,7 @@ const createLog = (req, res, next) => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(createLog)
+app.use(createLog)
 //xapp.options("*",cors(corsConfig))
 app.use(cors(corsConfig));
 app.use('/', userRoutes);
