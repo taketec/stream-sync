@@ -1,4 +1,4 @@
-# stream-sync, a wathparty app made in the mern stack
+# stream-sync, a watch-together app made with react, express, mongoDB and socket-io 
 
 - demo - https://stream-sync-app.onrender.com
   (if this link doesnt work, just wait for about 50-100 second for the server instance to bootup. It shuts down due to inactivity)
