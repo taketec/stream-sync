@@ -1,8 +1,8 @@
-# stream-sync, a wathparty app made in the mern stack
+### stream-sync, a wathparty app made in the mern stack
 
 demo - https://stream-sync-app.onrender.com
 
-previews-
+## previews-
 
 # login - 
 ![](https://github.com/taketec/stream-sync/blob/main/previews/login.gif)
