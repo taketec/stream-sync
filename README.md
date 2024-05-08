@@ -25,12 +25,12 @@ Later on I needed an excuse to build a web app, for learning web dev so I made t
 
 
 ## Things i wanna improve upon - 
--securing socket connections with jwt\
--adding a create/join room page(like google meet)\
--adding server side checks on room creations\
--adding login with forgot password and email verification (i have only kept login with google in the demo, because this wasnt implemented)\
--improving the jwt middleware\
--making the fetch username flow better
+- securing socket connections with jwt\
+- adding a create/join room page(like google meet)\
+- adding server side checks on room creations\
+- adding login with forgot password and email verification (i have only kept login with google in the demo, because this wasnt implemented)\
+- improving the jwt middleware\
+- making the fetch username flow better
 
 ## Features I will implement later if I have the time and motivation to -
 - Feature to upload video files and stream them with hls in a watch party\
