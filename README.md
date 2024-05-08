@@ -1,6 +1,6 @@
 # stream-sync, a wathparty app made in the mern stack
 
-demo - https://stream-sync-app.onrender.com
+- demo - https://stream-sync-app.onrender.com
 
 # previews-
 
