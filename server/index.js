@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import mongoDBConnect from './mongob/connection.js';
+import mongoDBConnect from './mongodb/connection.js';
 import express from 'express';
 import userRoutes from './routes/user.js';
 import bodyParser from 'body-parser';
@@ -30,7 +30,7 @@ const createLog = (req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(createLog)
-//app.options("",cors(corsConfig))
+app.options("",cors(corsConfig))
 app.use(cors(corsConfig));
 app.use('/', userRoutes);
 
