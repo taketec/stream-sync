@@ -1,18 +1,18 @@
-### stream-sync, a wathparty app made in the mern stack
+# stream-sync, a wathparty app made in the mern stack
 
 demo - https://stream-sync-app.onrender.com
 
-## previews-
+# previews-
 
-# login - 
+## login - 
 ![](https://github.com/taketec/stream-sync/blob/main/previews/login.gif)
 
 
-# play from youtube - 
+## play from youtube - 
 ![](https://github.com/taketec/stream-sync/blob/main/previews/youtube.gif)
 
 
-# play from file - 
+## play from file - 
 ![](https://github.com/taketec/stream-sync/blob/main/previews/file.gif)
 
 
@@ -24,7 +24,7 @@ Later on I needed an excuse to build a web app for learning web dev so i made th
 
 
 
-# Things i wanna improve upon - 
+## Things i wanna improve upon - 
 -securing socket connections with jwt\
 -adding a create/join room page(like google meet)\
 -adding server side checks on room creations\
