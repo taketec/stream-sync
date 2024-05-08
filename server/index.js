@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import mongoDBConnect from './mongodb/connection.js';
+import mongoDBConnect from './mongob/connection.js';
 import express from 'express';
 import userRoutes from './routes/user.js';
 import bodyParser from 'body-parser';
@@ -14,9 +14,12 @@ mongoDBConnect();
 
 const app = express();
 const corsConfig = {
-  origin: ['http://localhost:3000','http://192.168.1.4:3000'],
+  //origin: ['http://localhost:3000','http://192.168.1.4:3000'],
+  origin: '*',
   credentials: true,
+  methods:["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
 };
+
 const createLog = (req, res, next) => {
   res.on("finish", function() {
     console.log(req.method,req.body, decodeURI(req.url), res.statusCode, res.statusMessage);
