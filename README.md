@@ -22,7 +22,7 @@ I have been wondering about how I can implement a event based video syncronizati
 
 Doing some research upon this I found this really cool article https://levelup.gitconnected.com/tired-of-making-to-do-list-applications-acce875fe617 which explained exactly what I wanted. This article is is a work of art, the code here is very elegant and the research done is very neat, so kudos to the author for such great work.
 
-Later on I needed an excuse to build a web app, for learning web dev so I made this app.
+Later on, I needed an excuse to build a web app, for learning web dev so I made this app.
 
 
 
