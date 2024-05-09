@@ -89,7 +89,6 @@ const Room = () => {
         under_estimate.current = median(under_estimates.current)
         setCorrection((under_estimate.current + over_estimate.current)/2)		
         console.log(`%c Updated val for under_estimate is ${under_estimate.current}`, "color:green")
-        console.log(`%c New correction time is ${correction} seconds`, 'color:purple; font-size:12px')
       })
       
       socket.on("time_sync_response_forward", (calculated_diff)=>{
@@ -98,7 +97,6 @@ const Room = () => {
         over_estimate.current = median(over_estimates.current)
         setCorrection((under_estimate.current + over_estimate.current)/2) 	
         console.log(`%c Updated val for over_estimate is ${over_estimates.current}`, "color:green")
-        console.log(`%c New correction time is ${correction} seconds`, 'color:purple; font-size:12px')
       })
       
       socket.on('userlist_update',(userlist)=>{
@@ -139,6 +137,9 @@ const Room = () => {
   useEffect(() => console.log(roomId),[roomId])//logs room id
 
   useEffect(() => console.log(selectedTab),[selectedTab])//logs selected tab
+
+  useEffect(() =>   console.log(`%c New correction time is ${correction} seconds`, 'color:purple; font-size:12px')
+  ,[correction])//logs correction tab
 
 
   const handleTabChange = (tabIndex) => {
