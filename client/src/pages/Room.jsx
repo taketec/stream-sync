@@ -97,7 +97,7 @@ const Room = () => {
         over_estimates.current.push(over_estimate_latest)	
         over_estimate.current = median(over_estimates.current)
         setCorrection((under_estimate.current + over_estimate.current)/2) 	
-        console.log(`%c Updated val for over_estimate is ${over_estimate.current}`, "color:green")
+        console.log(`%c Updated val for over_estimate is ${over_estimates.current}`, "color:green")
         console.log(`%c New correction time is ${correction} seconds`, 'color:purple; font-size:12px')
       })
       
@@ -128,7 +128,9 @@ const Room = () => {
         do_time_sync_one_cycle_backward()
         await timeout(1000)
         do_time_sync_one_cycle_forward()
+        
       }
+      
     }
 
     do_time_sync()
