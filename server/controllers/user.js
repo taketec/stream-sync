@@ -45,7 +45,7 @@ export const register = async (req, res) => {
   export const validUser = async (req, res) => {
     try {
       const validuser = await user
-        .findOne({ _id: req.rootUserId })
+        .findOne({ _id: req.userId })
         .select('-password');
       if (!validuser) res.json({ message: 'user is not valid' });
       res.status(201).json({
@@ -119,9 +119,9 @@ export const register = async (req, res) => {
     }
   }
   
-  export const logout = (req, res) => {
-    req.rootUser.tokens = req.rootUser.tokens.filter((e) => e.token != req.token);
-  };
+  // export const logout = (req, res) => {
+  //   req.rootUser.tokens = req.rootUser.tokens.filter((e) => e.token != req.token);
+  // };
 
   export const searchUsers = async (req, res) => {
     // const { search } = req.query;
@@ -134,7 +134,7 @@ export const register = async (req, res) => {
         }
       : {};
   
-    const users = await user.find(search).find({ _id: { $ne: req.rootUserId } });
+    const users = await user.find(search).find({ _id: { $ne: req.userId } });
     res.status(200).send(users);
   };
 
