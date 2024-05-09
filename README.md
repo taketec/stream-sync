@@ -2,6 +2,7 @@
 
 - demo - https://stream-sync-app.onrender.com
   (if this link doesnt work, just wait for about 50-100 second for the server instance to bootup. It shuts down due to inactivity)
+- the demo runs off of the deploy branch which has slight modifications.
 
 # previews-
 
