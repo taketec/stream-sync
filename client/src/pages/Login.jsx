@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { googleLoginUser, validUser } from '../apis/auth';
 import { useGoogleLogin } from '@react-oauth/google';
 import {generate_random_string} from '../utils.js'
+import googleLogo from '../../assets/google_logo.png';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -57,7 +58,8 @@ const Login = () => {
         <h1 className="text-2xl font-bold text-center">Login with Google</h1>
         {errorMessage && <div className="text-red-500 text-center">{errorMessage}</div>}
         <button onClick={() => googleLogin()} className="block w-full px-4 py-2 mt-4 text-sm font-medium text-center text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
-          Sign in with Google 🚀
+          Sign in with Google 
+          <img src={googleLogo} alt="Google Logo" className="inline-block w-6 h-6 mr-2" />
         </button>
         <div className="flex justify-center mt-8">
           <h1 className="text-xs text-center">Welcome to StreamSync 📺</h1>

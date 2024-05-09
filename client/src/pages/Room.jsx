@@ -138,7 +138,7 @@ const Room = () => {
 
   useEffect(() => console.log(roomId),[roomId])//logs room id
 
-  useEffect(() => console.log(selectedTab),[selectedTab])//logs room id
+  useEffect(() => console.log(selectedTab),[selectedTab])//logs selected tab
 
 
   const handleTabChange = (tabIndex) => {
