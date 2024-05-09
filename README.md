@@ -30,11 +30,12 @@ Later on I needed an excuse to build a web app, for learning web dev so I made t
 - adding a create/join room page(like google meet)\
 - adding server side checks on room creations\
 - adding login with forgot password and email verification (i have only kept login with google in the demo, because this wasnt implemented)\
-- improving the jwt middleware\
+- improving the jwt middleware (adding refresh tokens maybe)\
 - making the fetch username flow better
 
-## Features I will implement later if I have the time and motivation to -
-- Feature to upload video files and stream them with hls in a watch party\
+## Features I will implement later if I have the time to -
+- Feature to upload video files and stream them with hls in a watch party
 - making the overall ui/ux better
 - adding dp to the 'users in room' section
- 
+- adding custom player controls to the react player, or using a better player like vidstack-io so that we can distinguish between user inputs and server made inputs to the video-player as mentioned in the article
+   
