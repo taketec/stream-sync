@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate ,useLocation } from 'react-router-dom';
 import { googleLoginUser, validUser } from '../apis/auth';
 import { useGoogleLogin } from '@react-oauth/google';
 import {generate_random_string} from '../utils.js'
@@ -9,16 +9,29 @@ const Login = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null);
 
+  const location = useLocation();
+  
+  const prevRoom = useRef(null)
+  
+  useEffect(()=>console.log('prevroom is this',prevRoom.current),[prevRoom.current])
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        prevRoom.current = location.state
+
         const token = localStorage.getItem('userToken');
 
         if (token) {
           const response = await validUser();
           if (response.token) {
+
+            if (prevRoom.current){
+              navigate(`/room/${prevRoom.current}`);
+            }else{
             let roomId = generate_random_string()
-            navigate(`/room/${roomId}`);
+            navigate(`/room/${roomId}`);}
+            
           } else {
             localStorage.removeItem('userToken'); // Clear invalid token
           }
@@ -39,8 +52,14 @@ const Login = () => {
         const response = await googleLoginUser({ token: tokenResponse.access_token });
         let token = response.data.token;
         localStorage.setItem('userToken', token);
-        let roomId = generate_random_string()
-        navigate(`/room/${roomId}`);
+
+
+        if (prevRoom.current){
+          navigate(`/room/${prevRoom.current}`);
+        }else{
+          let roomId = generate_random_string()
+          navigate(`/room/${roomId}`);}
+
       } catch (error) {
         setErrorMessage(error.response?.data?.message || 'Login failed');
       }
@@ -58,8 +77,7 @@ const Login = () => {
         <h1 className="text-2xl font-bold text-center">Login with Google</h1>
         {errorMessage && <div className="text-red-500 text-center">{errorMessage}</div>}
         <button onClick={() => googleLogin()} className="block w-full px-4 py-2 mt-4 text-sm font-medium text-center text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
-          Sign in with Google   
-          <img src={googleLogo} alt="Google Logo" className="inline-block w-6 h-6 mr-2" />
+          Sign in with Google 🚀
         </button>
         <div className="flex justify-center mt-8">
           <h1 className="text-xs text-center">Welcome to StreamSync 📺</h1>

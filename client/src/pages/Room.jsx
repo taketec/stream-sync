@@ -38,13 +38,14 @@ const Room = () => {
         if (token) {
           const response = await validUser();
           if (!response.token) {
-            navigate('/login'); // Replace with your dashboard route
+            navigate('/login',{state:roomId}); // Replace with your dashboard route
+            
             localStorage.removeItem('userToken'); // Clear invalid token
 
           }
           } 
         else {
-          navigate('/login'); // Replace with your dashboard route
+          navigate('/login',{state:roomId}); // Replace with your dashboard route
         }
         }
      catch (error) {
