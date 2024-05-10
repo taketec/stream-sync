@@ -18,15 +18,14 @@
 ![](https://github.com/taketec/stream-sync/blob/main/previews/file.gif)
 
 
-I've been wondering about implementing an event based video synchronisation app since a long time. How hard can it be, there are 3 states of a video , playing, paused, buffering so it shouldnt be very hard to sync videos on multiple clients and not have to use something like webrtc right? Well... its not really that simple. The need for this arose when some of my friends didnt have very good internet connections to watch videos with webrtc like discord and google meet and thats how I started thinking about it. 
+I've been wondering about implementing an event based video synchronisation app since a long time, where instead of sharing a screen using webRTC which degrades quality and needs good internet bandwidth, we use events on the client like paused or played or buffering to change the state of the video time and playing/pausing across all clients in that room. The need for this arose when some of my friends didnt have very good internet connections to watch videos with webRTC like discord and google meet and thats how I started thinking about it.
 
-Doing some research upon this I found this really cool article https://levelup.gitconnected.com/tired-of-making-to-do-list-applications-acce875fe617 which explained exactly what I wanted. This article is is a work of art, the code here is very elegant and the research done is very neat, so kudos to the author for such great work.
+Doing some research upon this I found this really cool medium article https://levelup.gitconnected.com/tired-of-making-to-do-list-applications-acce875fe617 which explained exactly what I wanted. This article is is a work of art, the research done is very neat, so please check it out and kudos to the author for such great work.
 
-Later on, I needed an excuse to build a web app, for learning web dev so I made this app.
+Later on when i dove into the world of web development, I really needed a good excuse to build a web app for learning web dev, so, I made this app.
 
 
-
-## Things i wanna improve upon - 
+## Things i wanna improve - 
 - securing socket connections with jwt
 - adding a create/join room page(like google meet)
 - adding server side checks on room creations
