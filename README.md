@@ -18,11 +18,11 @@
 ![](https://github.com/taketec/stream-sync/blob/main/previews/file.gif)
 
 
-I've been contemplating the development of an event-driven video synchronization application for quite some time. Unlike conventional methods like screen sharing via WebRTC, which often results in degraded quality and requires robust internet bandwidth, this application leverages client-side events such as pausing, playing, or buffering to synchronize video playback across all participants in a shared room.The inspiration struck when I noticed that some of my friends struggled with poor internet connections during video calls on platforms like Discord and Google Meet. That's when I began contemplating solutions.
+I've been contemplating the development of an event-driven video synchronization application for quite some time. Unlike conventional methods like screen sharing via WebRTC, which often results in degraded quality and requires robust internet bandwidth, this application leverages client-side events such as pausing, playing, or buffering to synchronize video playback across all participants in a shared room.The idea struck when I noticed that some of my friends struggled with poor internet connections during video calls on platforms like Discord and Google Meet. That's when I began contemplating solutions.
 
 Doing some research upon this I found this really cool medium article https://levelup.gitconnected.com/tired-of-making-to-do-list-applications-acce875fe617 which explained exactly what I wanted. This article is is a work of art, the research done is very neat, so please check it out and kudos to the author for such great work.
 
-Later on when i delved deeper into the world of web development, I really needed a good excuse to build a web app for learning web dev, so, I made this app.
+Later on as i delved deeper into the world of web development, I really needed a good excuse to build a web app for learning web dev, so, I made this app.
 
 
 ## Things i wanna improve - 
