@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import mongoDBConnect from './mongoDb/connection.js';
+import mongoDBConnect from './mongodb/connection.js';
 import express from 'express';
 import userRoutes from './routes/user.js';
 import bodyParser from 'body-parser';
@@ -145,7 +145,7 @@ io.on('connection', (socket) => {
     //socket.to(e[1]).emit('user_left_room' , rooms_state[e[1]].users[e[0]])
     if(rooms_state[e[1]].users[e[0]]){
     delete rooms_state[e[1]].users[e[0]]; 
-  }
+    }
     io.to(e[1]).emit('userlist_update', Object.values(rooms_state[e[1]].users))
     //logic to remove the user from the room 
     console.table(rooms_state[e[1]])

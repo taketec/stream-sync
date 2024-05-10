@@ -3,7 +3,6 @@ import { useNavigate ,useLocation } from 'react-router-dom';
 import { googleLoginUser, validUser } from '../apis/auth';
 import { useGoogleLogin } from '@react-oauth/google';
 import {generate_random_string} from '../utils.js'
-import googleLogo from '../assets/google_logo.png';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -33,7 +32,7 @@ const Login = () => {
             navigate(`/room/${roomId}`);}
             
           } else {
-            localStorage.removeItem('userToken'); // Clear invalid token
+            localStorage.removeItem('userToken');
           }
         }
       } catch (error) {

@@ -169,7 +169,7 @@ const YouTubeMedia = ({socket,roomId,correction}) => {
 
 
     return(
-      <div className="flex flex-col items-center w-full m-2 "> {/* Parent div */}
+      <div className="flex flex-col items-center w-full m-2 "> 
         <div className="relative" style={{ paddingTop: '1%', width: '100%' }}>
           <form onSubmit={handleVideoChange}>
             <div className="m-0">
@@ -192,7 +192,7 @@ const YouTubeMedia = ({socket,roomId,correction}) => {
         <div className="relative" style={{ paddingTop: '0%', width: '100%' }}>
           <ReactPlayer 
             ref={playerRef}
-            onSeek={handle_seek}//SEEK EVENT GETTER
+            onSeek={handle_seek}
             onPause={handle_pause}
             onPlay={handle_play}
             onBufferEnd={handle_play}
