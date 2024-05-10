@@ -26,7 +26,7 @@ export function median(values){
   }
 
   export function generate_random_string(length = 3) {
-    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    const characters = 'abcdefghijklmnopqrstuvwxyz';
     const segments = [];
   
     for (let i = 0; i < length; i++) {
