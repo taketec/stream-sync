@@ -18,11 +18,11 @@
 ![](https://github.com/taketec/stream-sync/blob/main/previews/file.gif)
 
 
-I've been wondering about implementing an event based video synchronisation app since a long time, where instead of sharing a screen using webRTC which degrades quality and needs good internet bandwidth, we use events on the client like paused or played or buffering to change the state of the video time and playing/pausing across all clients in that room. The need for this arose when some of my friends didnt have very good internet connections to watch videos with webRTC like discord and google meet and thats how I started thinking about it.
+I've been contemplating the development of an event-driven video synchronization application for quite some time. Unlike conventional methods like screen sharing via WebRTC, which often results in degraded quality and requires robust internet bandwidth, this application leverages client-side events such as pausing, playing, or buffering to synchronize video playback across all participants in a shared room.The inspiration struck when I noticed that some of my friends struggled with poor internet connections during video calls on platforms like Discord and Google Meet. That's when I began contemplating solutions.
 
 Doing some research upon this I found this really cool medium article https://levelup.gitconnected.com/tired-of-making-to-do-list-applications-acce875fe617 which explained exactly what I wanted. This article is is a work of art, the research done is very neat, so please check it out and kudos to the author for such great work.
 
-Later on when i dove into the world of web development, I really needed a good excuse to build a web app for learning web dev, so, I made this app.
+Later on when i delved deeper into the world of web development, I really needed a good excuse to build a web app for learning web dev, so, I made this app.
 
 
 ## Things i wanna improve - 
@@ -33,7 +33,7 @@ Later on when i dove into the world of web development, I really needed a good e
 - improving the jwt middleware (adding refresh tokens maybe)
 - making the fetch username flow better
 
-## Features I will implement later if I have the time to -
+## Features i would love to implement later with time -
 - Feature to upload video files and stream them with hls in a watch party
 - making the overall ui/ux better
 - adding dp to the 'users in room' section
