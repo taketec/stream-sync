@@ -4,7 +4,7 @@ import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
 import {get_global_time, get_jwt} from '../utils'
 
-const THRESH_IGNORANCE = 0.2
+const THRESH_IGNORANCE = 0.5
 const THRESH_IGNORANCE_SEEK = 0.5
 
 const PLAYING_THRESH = 1 
