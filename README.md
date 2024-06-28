@@ -37,5 +37,5 @@ Later on as i delved deeper into the world of web development, I really needed a
 - Feature to upload video files and stream them with hls in a watch party
 - making the overall ui/ux better
 - adding a display picture to the 'users in room' section
-- adding custom player controls to the react player, or using a better player like vidstack-io so that we can distinguish between user inputs and server made inputs to the video-player as mentioned in the article
+- adding custom player controls to the react player, or using a better player like vidstack-io or plyr so that we can distinguish between user inputs and server made changes to the video-player without hacking around as mentioned in the article
    
