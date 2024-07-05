@@ -1,7 +1,7 @@
 # stream-sync, a watch-together app made with react, express, mongoDB and socket-io 
 
 - demo - https://stream-sync-app.onrender.com
-  (if this link doesnt work, just wait for about 50-100 second for both the frontend and backend server instance to cold start)
+  (if this link doesnt work, just wait for about 30 seconds for the frontend to bootup and click login, wait for another 30 seconds for the backend to bootup and log you in. Cold boots take time.)
 - the demo runs off of the deploy branch which has slight modifications.
 
 # previews-
