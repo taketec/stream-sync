@@ -1,4 +1,4 @@
-# stream-sync, a watch-together app made with react, express, mongoDB and socket-io 
+# stream-sync, a watch-party app made with react, express, mongoDB and socket-io 
 
 - demo - https://stream-sync-app.onrender.com
   (if this link doesnt work, just wait for about 30 seconds for the frontend to bootup and click login, wait for another 30 seconds for the backend to bootup and log you in. Cold boots take time.)
