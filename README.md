@@ -25,17 +25,16 @@ Doing some research upon this I found this really cool medium article https://le
 Later on as i delved deeper into the world of web development, I really needed a good excuse to build a web app for learning web dev, so, I made this app.
 
 
-## Things i wanna improve - 
+## Features i would love to implement later with time - (from most important to least)
+- adding horizontally scalable websockets for realtime updates.
+- Integrate a CDN for a video on demand service (VOD) so that users can upload and watch video streams
+- Extending the above mentioned feature, with a payment gateway and credits system, since video streaming is expensive.
+- adding custom player controls to the react player, or using a better player like vidstack-io or plyr so that we can distinguish between user inputs and server made changes to the video-player without hacking around as mentioned in the article
 - securing the websocket connections with jwt
 - adding a create/join room page(like google meet)
 - adding server side checks on room creations
 - adding login with forgot password and email verification (i have only kept login with google in the demo, because this wasnt implemented)
-- improving the jwt middleware (adding refresh tokens maybe)
-- making the fetch username flow better
-
-## Features i would love to implement later with time -
-- Integrate a video CDN into the site so that users can upload a video and watch it together (eg: cloudinary)
+- adding refresh tokens
 - making the overall ui/ux better
 - adding a display picture to the 'users in room' section
-- adding custom player controls to the react player, or using a better player like vidstack-io or plyr so that we can distinguish between user inputs and server made changes to the video-player without hacking around as mentioned in the article
    
