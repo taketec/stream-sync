@@ -16,6 +16,8 @@
 # misc
 /server/.env
 /client/.env
+/client/dist
+/client/public/electron.js
 
 
 .DS_Store
