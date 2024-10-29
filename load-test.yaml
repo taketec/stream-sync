@@ -1,0 +1,24 @@
+
+config:
+  target: "ws://localhost:8000"
+  socketio:
+    transports: ["websocket"]
+  phases:
+    - duration: 200 # Run scenario for 10 seconds
+      arrivalCount: 2000 # Create 20 virtual users per scenario
+scenarios:
+  - engine: "socketio"
+    flow:
+      - emit:
+          channel: "join_room"
+          data: { "room": "a", "username": "JohnDoe" }
+
+      - think: 
+          50 
+      - emit:
+          channel: "state_update_from_client"
+          data: {"room":"a","state":{"media":"youtube","url":"https://www.youtube.com/watch?v=Hury5p9sh6w","video_timestamp":0,"lastUpdated":1729963891.995,"playing":true,"global_timestamp":1729963891.995,"client_uid":"eyJpZCI6IjY2M2IzNzExMTJlYWJkNmRlM"}}
+      - think: 
+          450 
+  
+  
