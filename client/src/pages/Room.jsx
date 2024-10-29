@@ -34,7 +34,6 @@ const Room = () => {
     const check_auth = async () => {
       try {
         const token = localStorage.getItem('userToken');
-
         if (token) {
           const response = await validUser();
           if (!response.token) {
@@ -59,6 +58,7 @@ const Room = () => {
   useEffect(() => {
     const socket_listen = async() => {
       socket = io('https://stream-sync.onrender.com')
+      //socket = io('http://localhost:8000')
       const response = await validUser();
       let username
       try{

@@ -42,7 +42,6 @@ export const googleLoginUser = async (body) => {
 export const validUser = async () => {
   try {
     const token = localStorage.getItem('userToken');
-
     const { data } = await API(token).get(`/auth/valid`, {
       headers: { Authorization: token },
     });
