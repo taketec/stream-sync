@@ -46,7 +46,7 @@ const server = app.listen(PORT, () => {
 const io = new Server.Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: ['http://localhost:3000','https://stream-sync-app.onrender.com'],
+    origin: ['http://localhost:3000','https://stream-sync-app.onrender.com','http://stream-sync-frontend-s3.s3-website.ap-south-1.amazonaws.com'],
   },
 });
 
