@@ -14,7 +14,7 @@ mongoDBConnect();
 
 const app = express();
 const corsConfig = {
-  origin: ['http://localhost:3000','http://192.168.1.4:3000','https://stream-sync-app.onrender.com','https://stream-sync-frontend-s3.s3-website.ap-south-1.amazonaws.com'],
+  origin: ['http://localhost:3000','http://192.168.1.4:3000','https://stream-sync-app.onrender.com','https://stream-sync-frontend-s3.s3-website.ap-south-1.amazonaws.com','http://stream-sync-frontend-s3.s3-website.ap-south-1.amazonaws.com'],
   //origin: '*',
   credentials: true,
   methods:["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
@@ -46,7 +46,7 @@ const server = app.listen(PORT, () => {
 const io = new Server.Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: ['http://localhost:3000','https://stream-sync-app.onrender.com','https://stream-sync-frontend-s3.s3-website.ap-south-1.amazonaws.com'],
+    origin: ['http://localhost:3000','http://stream-sync-frontend-s3.s3-website.ap-south-1.amazonaws.com','https://stream-sync-app.onrender.com','https://stream-sync-frontend-s3.s3-website.ap-south-1.amazonaws.com'],
   },
 });
 
