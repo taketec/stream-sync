@@ -36,6 +36,7 @@ const Room = () => {
         const token = localStorage.getItem('userToken');
         if (token) {
           const response = await validUser();
+          console.log("token",import.meta.env.VITE_REACT_APP_clientId)
           if (!response.token) {
             navigate('/login',{state:roomId}); // Replace with your dashboard route
             
