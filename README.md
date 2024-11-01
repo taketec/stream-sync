@@ -26,9 +26,7 @@ Later on as i delved deeper into the world of web development, I really needed a
 
 
 ## Features i would love to implement later with time - (from most important to least)
-- adding horizontally scalable websockets for realtime updates.
-- Integrate a CDN for a video on demand service (VOD) so that users can upload and watch video streams
-- Extending the above mentioned feature, with a payment gateway and credits system, since video streaming is expensive.
+- Integrate a CDN for a video on demand service (VOD) so that users can upload and watch video streams OR stream video throught webtorrents (that would be cool)
 - adding custom player controls to the react player, or using a better player like vidstack-io or plyr so that we can distinguish between user inputs and server made changes to the video-player without hacking around as mentioned in the article
 - securing the websocket connections with jwt
 - adding a create/join room page(like google meet)
