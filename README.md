@@ -1,7 +1,7 @@
 # stream-sync, a watch-party app made with react, express, mongoDB and socket-io 
 
-- demo - https://stream-sync-app.onrender.com
-  ⚠️⚠️⚠️(if this link doesnt work, just wait for about 30 seconds for the frontend to bootup and click login, wait for another 30 seconds for the backend to bootup and log you in. Cold boots take time.)⚠️⚠️⚠️
+- demo - [https://stream-sync-app.onrender.com](https://deploy.dd5lzrcymgwyt.amplifyapp.com/room/uiz-zhf-nim/)
+  ⚠️⚠️⚠️(Please be patient with the app, it takes 5-10 seconds for everything to bootup and work.)⚠️⚠️⚠️
 - the demo runs off of the deploy branch which has slight modifications.
 
 # previews-
