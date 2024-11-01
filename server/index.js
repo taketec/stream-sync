@@ -15,7 +15,8 @@ mongoDBConnect();
 const app = express();
 const corsConfig = {
   origin: 
-  ['http://localhost:3000',
+  [
+    'http://localhost:3000',
     'http://192.168.1.4:3000',
     'https://stream-sync-app.onrender.com',
     'https://stream-sync-frontend-s3.s3-website.ap-south-1.amazonaws.com',
