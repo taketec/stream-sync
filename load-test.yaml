@@ -1,6 +1,6 @@
 
 config:
-  target: "ws://localhost:8000"
+  target: "wss://stream-sync-production-6ee8.up.railway.app"
   socketio:
     transports: ["websocket"]
   phases:

@@ -36,7 +36,6 @@ const Room = () => {
         const token = localStorage.getItem('userToken');
         if (token) {
           const response = await validUser();
-          console.log("token",import.meta.env.VITE_REACT_APP_clientId)
           if (!response.token) {
             navigate('/login',{state:roomId}); // Replace with your dashboard route
             
@@ -58,7 +57,7 @@ const Room = () => {
 
   useEffect(() => {
     const socket_listen = async() => {
-      socket = io('https://stream-sync.onrender.com')
+      socket = io('https://stream-sync-production-6ee8.up.railway.app')
       //socket = io('http://localhost:8000')
       const response = await validUser();
       let username

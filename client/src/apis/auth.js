@@ -3,12 +3,12 @@ import axios from 'axios';
 
 const API = (token) =>
   axios.create({
-    baseURL: 'https://stream-sync.onrender.com',
+    baseURL: 'https://stream-sync-production-6ee8.up.railway.app',
     headers: { Authorization: token },
   });
 
 
-let url = 'https://stream-sync.onrender.com';
+let url = 'https://stream-sync-production-6ee8.up.railway.app';
 
 // export const loginUser = async (body) => {
 //   try {
