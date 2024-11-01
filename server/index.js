@@ -12,7 +12,7 @@ const PORT=process.env.PORT || 8000
 mongoose.set('strictQuery', false);
 mongoDBConnect();
 
-allowed_origins =   [
+const allowed_origins =   [
   'http://localhost:3000',
   'http://192.168.1.4:3000',
   'https://stream-sync-app.onrender.com',
