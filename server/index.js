@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as Server from 'socket.io';
 import mongoose from "mongoose"
+import { rateLimit,MemoryStore } from 'express-rate-limit'
 
 const PORT=process.env.PORT || 8000
 
@@ -20,6 +21,17 @@ const allowed_origins =   [
   'http://stream-sync-frontend-s3.s3-website.ap-south-1.amazonaws.com',
   'https://deploy.dd5lzrcymgwyt.amplifyapp.com'
 ]
+
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	//store: MemoryStore , // Redis, Memcached, etc. See below.
+  message:  (req, res) => {
+		 return 'You can only make 100 requests every hour.'
+	},
+})
 
 
 const app = express();
@@ -40,6 +52,7 @@ const createLog = (req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(createLog)
+app.use(limiter)
 //xapp.options("*",cors(corsConfig))
 app.use(cors(corsConfig));
 app.use('/', userRoutes);

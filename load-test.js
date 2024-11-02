@@ -21,11 +21,11 @@ const createClient = () => {
 
   setInterval(() => {
     socket.emit("client to server event");
-  }, EMIT_INTERVAL_IN_MS);
+  }, EMIT_INTERVAL_IN_MS);//send message on some interval
 
   socket.on("server to client event", () => {
     packetsSinceLastReport++;
-  });
+  });//receive message 
 
   socket.on("disconnect", (reason) => {
     console.log(`disconnect due to ${reason}`);
