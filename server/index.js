@@ -24,10 +24,11 @@ const allowed_origins =   [
 
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
-	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	limit:100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
 	//store: MemoryStore , // Redis, Memcached, etc. See below.
+  statusCode:429,
   message:  (req, res) => {
 		 return 'You can only make 100 requests every hour.'
 	},
