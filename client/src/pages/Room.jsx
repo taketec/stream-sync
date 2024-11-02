@@ -170,12 +170,12 @@ const Room = () => {
             <nav>
             <ul className="flex">
               <li className="mr-2">
-                <button onClick={() => handleTabChange('youtube')} className="m-2 my-2 px-2 py-1 rounded-lg bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20">
+                <button onClick={() => handleTabChange('youtube')} className="m-2 my-2 px-2 py-1 bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20">
                   Youtube
                 </button>
               </li>
-              <li className="ml-4">
-                <button onClick={() => handleTabChange('file')} className="m-2 my-2 px-2 py-1 rounded-lg bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20">
+              <li className="ml-2">
+                <button onClick={() => handleTabChange('file')} className="m-2 my-2 px-2 py-1 rounded-sm bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20">
                   File
                 </button>
               </li>
