@@ -6,7 +6,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as Server from 'socket.io';
 import mongoose from "mongoose"
-import { rateLimit,MemoryStore } from 'express-rate-limit'
+import { rateLimit } from 'express-rate-limit'
+import { AuthSocket } from './middleware/auth.js';
 
 const PORT=process.env.PORT || 8000
 
@@ -92,7 +93,9 @@ function get_time(){
 // });
 
 let rooms_state = {}  
-io.on('connection', (socket) => {
+
+io.use((socket,next)=>AuthSocket(socket,next))//authenticate socket connection with jwt.
+.on('connection', (socket) => {
 
   socket.on('join_room', ({room:room,username:username}) => {
 
@@ -151,7 +154,8 @@ io.on('connection', (socket) => {
 
   socket.on('state_update_from_client',(data) =>{
     console.log(data.state)
-    rooms_state[data.room].state = data.state  
+    if(rooms_state&&rooms_state[data.room].state){
+    rooms_state[data.room].state = data.state  }
      console.table(rooms_state[data.room])
     socket.to(data.room).emit("state_update_from_server" , rooms_state[data.room].state);
   })

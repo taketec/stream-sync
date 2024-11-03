@@ -21,3 +21,21 @@ export const Auth = async (req, res, next) => {
     res.json({ error: 'Invalid Token' });
   }
 };
+
+export const AuthSocket = async (socket, next) => {
+  try {
+    
+     console.log(socket.handshake.auth.token)
+    if (socket.handshake.auth.token){
+      let x = jwt.verify(socket.handshake.auth.token, process.env.SECRET);
+      if(x){next()}
+    }
+    else {
+      console.log("error")
+      next(new Error('Authentication error'));
+    }    
+
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -1,14 +1,15 @@
 import axios from 'axios';
 
+export const url = 'http://localhost:8000';
+
 
 const API = (token) =>
   axios.create({
-    baseURL: 'https://stream-sync-production-6ee8.up.railway.app',
+    baseURL: url,
     headers: { Authorization: token },
   });
 
 
-let url = 'https://stream-sync-production-6ee8.up.railway.app';
 
 // export const loginUser = async (body) => {
 //   try {

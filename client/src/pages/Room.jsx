@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import io from "socket.io-client"
 import { useNavigate } from 'react-router-dom';
-import { validUser } from '../apis/auth';
+import { url, validUser } from '../apis/auth';
 import {get_global_time, median, timeout,get_jwt} from '../utils'
 import Userlist from '../components/UsersList';
 import YoutubeMedia from '../components/YoutubeMedia';
@@ -57,7 +57,9 @@ const Room = () => {
 
   useEffect(() => {
     const socket_listen = async() => {
-      socket = io('https://stream-sync-production-6ee8.up.railway.app')
+      socket = io(url, {auth: {
+        token: localStorage.getItem('userToken')
+      }})
       //socket = io('http://localhost:8000')
       const response = await validUser();
       let username
@@ -139,8 +141,7 @@ const Room = () => {
 
   useEffect(() => console.log(selectedTab),[selectedTab])//logs selected tab
 
-  useEffect(() =>   console.log(`%c New correction time is ${correction} seconds`, 'color:purple; font-size:12px')
-  ,[correction])//logs correction tab
+  useEffect(() =>   console.log(`%c New correction time is ${correction} seconds`, 'color:purple; font-size:12px'),[correction])//logs correction tab
 
 
   const handleTabChange = (tabIndex) => {
@@ -164,45 +165,44 @@ const Room = () => {
 
 
   return (
-      <div className="flex h-screen dark:bg-gray-800">
-        <div className="flex-1 flex flex-col">
-          {socket && (
-            <nav>
-              <ul className="flex">
-                <li className="mr-2">
-                  <button
-                    onClick={() => handleTabChange('youtube')}
-                    className="m-2 my-2 px-2 py-1 rounded-sm bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20 dark:bg-blue-600 dark:hover:bg-blue-700"
-                  >
-                    Youtube
-                  </button>
-                </li>
-                <li className="ml-2">
-                  <button
-                    onClick={() => handleTabChange('file')}
-                    className="m-2 my-2 px-2 py-1 rounded-sm bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20 dark:bg-blue-600 dark:hover:bg-blue-700"
-                  >
-                    File
-                  </button>
-                </li>
-              </ul>
-            </nav>
+    <div className="flex h-screen dark:bg-gray-800">
+      <div className="flex-1 flex flex-col">
+        {socket && (
+          <nav>
+            <ul className="flex">
+              <li className="mr-2">
+                <button
+                  onClick={() => handleTabChange('youtube')}
+                  className="m-2 my-2 px-2 py-1 rounded-sm bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20 dark:bg-blue-600 dark:hover:bg-blue-700"
+                >
+                  Youtube
+                </button>
+              </li>
+              <li className="ml-2">
+                <button
+                  onClick={() => handleTabChange('file')}
+                  className="m-2 my-2 px-2 py-1 rounded-sm bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20 dark:bg-blue-600 dark:hover:bg-blue-700"
+                >
+                  File
+                </button>
+              </li>
+            </ul>
+          </nav>
+        )}
+        <div className="flex-1">
+          {selectedTab && currentSocket && (
+            <>
+              {selectedTab === 'youtube' && <YoutubeMedia socket={currentSocket} roomId={roomId} correction={correction} />}
+              {selectedTab === 'file' && <FileMedia socket={currentSocket} roomId={roomId} correction={correction} />}
+            </>
           )}
-          <div className="flex-1">
-            {selectedTab && currentSocket && (
-              <>
-                {selectedTab === 'youtube' && <YoutubeMedia socket={currentSocket} roomId={roomId} correction={correction} />}
-                {selectedTab === 'file' && <FileMedia socket={currentSocket} roomId={roomId} correction={correction} />}
-              </>
-            )}
-          </div>
-        </div>
-        <div className="overflow-y-auto pt-5 bg-gray-100 dark:bg-gray-800 dark:text-gray-100" style={{ flex: '0 0 auto' }}>
-          <Userlist user_list={users} />
         </div>
       </div>
-
-);
+      <div className="overflow-y-auto pt-5 bg-gray-100 dark:bg-gray-800 dark:text-gray-100" style={{ flex: '0 0 auto' }}>
+        <Userlist user_list={users} />
+      </div>
+    </div>
+  );
 };
 
 export default Room;
