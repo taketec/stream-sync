@@ -172,7 +172,7 @@ const Room = () => {
                 <li className="mr-2">
                   <button
                     onClick={() => handleTabChange('youtube')}
-                    className="m-2 my-2 px-2 py-1 bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20 dark:bg-blue-600 dark:hover:bg-blue-700"
+                    className="m-2 my-2 px-2 py-1 rounded-sm bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20 dark:bg-blue-600 dark:hover:bg-blue-700"
                   >
                     Youtube
                   </button>
