@@ -154,7 +154,7 @@ io.use((socket,next)=>AuthSocket(socket,next))//authenticate socket connection w
 
   socket.on('state_update_from_client',(data) =>{
     console.log(data.state)
-    if(rooms_state&&rooms_state[data.room].state){
+    if(rooms_state&&rooms_state[data.room]&&rooms_state[data.room].state){
     rooms_state[data.room].state = data.state  }
      console.table(rooms_state[data.room])
     socket.to(data.room).emit("state_update_from_server" , rooms_state[data.room].state);
@@ -174,7 +174,7 @@ io.use((socket,next)=>AuthSocket(socket,next))//authenticate socket connection w
     if(rooms_state[e[1]].users[e[0]]){
     delete rooms_state[e[1]].users[e[0]]; 
     }
-    io.to(e[1]).emit('userlist_update', Object.values(rooms_state[e[1]].users))
+    io.to(e[1]).emit('userlist_update', Object.values(rooms_state[e[1]].users).filter(Boolean))
     //logic to remove the user from the room 
     console.table(rooms_state[e[1]])
   };
