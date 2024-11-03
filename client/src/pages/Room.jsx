@@ -164,7 +164,7 @@ const Room = () => {
 
 
   return (
-      <div className="flex h-screen border rounded shadow bg-white dark:bg-gray-800">
+      <div className="flex h-screen dark:bg-gray-800">
         <div className="flex-1 flex flex-col">
           {socket && (
             <nav>
