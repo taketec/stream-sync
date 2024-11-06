@@ -92,9 +92,21 @@ function get_time(){
 //   }, delay);
 // });
 
-let rooms_state = {}  
+let rooms_state = {}//initialize roomstate object  
 
-io.use((socket,next)=>AuthSocket(socket,next))//authenticate socket connection with jwt.
+let blank_state = {
+  media : 'file',
+  url: null,
+  video_timestamp : 0.0,
+  lastUpdated : get_time(),
+  playing:false,
+  global_timestamp: get_time(),
+  //client_uid: get_jwt().substring(37,70)
+}
+
+
+io.use((socket,next)=>
+AuthSocket(socket,next))  //authenticate socket connection with jwt.
 .on('connection', (socket) => {
 
   socket.on('join_room', ({room:room,username:username}) => {
@@ -129,16 +141,6 @@ io.use((socket,next)=>AuthSocket(socket,next))//authenticate socket connection w
   socket.on('explicit_state_request', (room) => {
     if (rooms_state[room] == undefined){
       console.log('new room created')
-      let blank_state = {
-        media : 'file',
-        url: null,
-        video_timestamp : 0.0,
-        lastUpdated : get_time(),
-        playing:false,
-        global_timestamp: get_time(),
-        //client_uid: get_jwt().substring(37,70)
-      }
-
       rooms_state[room] = {users:[], state:blank_state}; //adding default room state to a room if it doesnt already exist
     }
     socket.emit('state_update_from_server',rooms_state[room].state)
@@ -154,11 +156,13 @@ io.use((socket,next)=>AuthSocket(socket,next))//authenticate socket connection w
 
   socket.on('state_update_from_client',(data) =>{
     console.log(data.state)
-    if(rooms_state&&rooms_state[data.room]&&rooms_state[data.room].state){
-    rooms_state[data.room].state = data.state  }
-     console.table(rooms_state[data.room])
-    socket.to(data.room).emit("state_update_from_server" , rooms_state[data.room].state);
-  })
+      if (rooms_state[data.room] && rooms_state[data.room].state) {
+        rooms_state[data.room].state = data.state;
+        socket.to(data.room).emit("state_update_from_server", rooms_state[data.room].state);
+      } else {
+        rooms_state[data.room] = { users: [], state: blank_state };
+      }
+      })
 
   //have to use disconnecting here because once the socket is 'disconnected' its room data is lost
   socket.on('disconnecting', () => {
