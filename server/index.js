@@ -181,8 +181,8 @@ AuthSocket(socket,next))  //authenticate socket connection with jwt.
     //socket.to(e[1]).emit('user_left_room' , rooms_state[e[1]].users[e[0]])
     if(rooms_state[e[1]].users[e[0]]){
     delete rooms_state[e[1]].users[e[0]]; 
-    }
-    io.to(e[1]).emit('userlist_update', Object.values(rooms_state[e[1]].users).filter(Boolean))
+    }else{
+    io.to(e[1]).emit('userlist_update', Object.values(rooms_state[e[1]].users).filter(Boolean))}
     //logic to remove the user from the room 
     console.table(rooms_state[e[1]])
   };
