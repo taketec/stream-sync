@@ -63,6 +63,10 @@ app.get('/', (req, res) => {
   res.json({ message: "hi humans" });
 });
 
+app.get('/x-forwarded-for', (request, response) => response.send(request.headers['x-forwarded-for']))
+
+app.set('trust proxy', 1)
+app.get('/ip', (request, response) => response.send(request.ip))
 
 const server = app.listen(PORT, () => {
   console.log(`Server Listening at PORT - ${PORT}`);
