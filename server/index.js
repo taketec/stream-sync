@@ -98,15 +98,6 @@ function get_time(){
 
 let rooms_state = {}//initialize roomstate object  
 
-let blank_state = {
-  media : 'file',
-  url: null,
-  video_timestamp : 0.0,
-  lastUpdated : get_time(),
-  playing:false,
-  global_timestamp: get_time(),
-  //client_uid: get_jwt().substring(37,70)
-}
 
 
 io.use((socket,next)=>
@@ -164,7 +155,16 @@ AuthSocket(socket,next))  //authenticate socket connection with jwt.
         rooms_state[data.room].state = data.state;
         socket.to(data.room).emit("state_update_from_server", rooms_state[data.room].state);
       } else {
-        rooms_state[data.room] = { users: [], state: blank_state };
+        
+        rooms_state[data.room] = { users: [], state: {
+          media : 'file',
+          url: null,
+          video_timestamp : 0.0,
+          lastUpdated : get_time(),
+          playing:false,
+          global_timestamp: get_time(),
+          //client_uid: get_jwt().substring(37,70)
+        } };
       }
       })
 
