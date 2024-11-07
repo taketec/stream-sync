@@ -106,7 +106,7 @@ AuthSocket(socket,next))  //authenticate socket connection with jwt.
 
   socket.on('join_room', ({room:room,username:username}) => {
 
-    if (rooms_state[room] == undefined){
+    if (!rooms_state[room]){
       console.log('new room created')
       let blank_state = {
         media : 'file',
