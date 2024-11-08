@@ -24,13 +24,18 @@ Doing some research upon this I found this really cool medium article https://le
 
 Later on as i delved deeper into the world of web development, I really needed a good excuse to build a web app for learning web dev, so, I made this app.
 
+## Challenges
+- Managing video state with react player. The play/pause becomes out of state alot of the times. And it is very hard to exactly know where the video is and what its state is. This bug propagates trough and leads to a buggy experiance.
+  
 
 ## Features i would love to implement later with time - (from most important to least)
 - Integrate a CDN for a video on demand service (VOD) so that users can upload and watch video streams OR stream video throught webtorrents (that would be cool)
-- adding custom player controls to the react player, or using a better player like vidstack-io or plyr so that we can distinguish between user inputs and server made changes to the video-player without hacking around as mentioned in the article
+- adding custom player controls to the react player, or using a better player so that we can distinguish between user inputs and server made changes to the video-player without hacking around as mentioned in the article
+- adding a redis instance to this stack to manage the video state in all the rooms. This would allow us to manage the state via multiple servers.
+- splitting the server into a main service for authentication/room creation and socket-io services with a redis backplane to make the whole thing scalable.
+- adding refresh tokens
 - adding a create/join room page(like google meet)
 - adding login with forgot password and email verification (i have only kept login with google in the demo, because this wasnt implemented)
-- adding refresh tokens
 - making the overall ui/ux better
 - adding a display picture to the 'users in room' section
    
