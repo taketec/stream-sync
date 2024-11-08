@@ -8,13 +8,17 @@ import * as Server from 'socket.io';
 import mongoose from "mongoose"
 import { rateLimit } from 'express-rate-limit'
 import { AuthSocket } from './middleware/auth.js';
+import { createAdapter } from "@socket.io/redis-adapter";
+import { Redis } from "ioredis";
+import { RedisStore } from 'rate-limit-redis'
 
-const PORT=process.env.PORT || 8000
+const PORT = process.env.PORT || 8000
 
 mongoose.set('strictQuery', false);
 mongoDBConnect();
 
 const allowed_origins =   [
+  'http://localhost:3001',
   'http://localhost:3000',
   'http://192.168.1.4:3000',
   'https://stream-sync-app.onrender.com',
@@ -23,13 +27,17 @@ const allowed_origins =   [
   'https://deploy.dd5lzrcymgwyt.amplifyapp.com'
 ]
 
+const client = new Redis()
+
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
 	limit:100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-	//store: MemoryStore , // Redis, Memcached, etc. See below.
-  statusCode:429,
+	store: new RedisStore({
+		// @ts-expect-error - Known issue: the `call` function is not present in @types/ioredis
+		sendCommand: (...args) => client.call(...args),
+	}),  statusCode:429,
   message:  (req, res) => {
 		 return 'You can only make 100 requests every hour.'
 	},
@@ -54,7 +62,7 @@ const createLog = (req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(createLog)
-app.use(limiter)
+//app.use(limiter)
 //xapp.options("*",cors(corsConfig))
 app.use(cors(corsConfig));
 app.use('/', userRoutes);
@@ -72,11 +80,16 @@ const server = app.listen(PORT, () => {
   console.log(`Server Listening at PORT - ${PORT}`);
 });
 
+
+const pubClient = new Redis();
+const subClient = pubClient.duplicate();
+
 const io = new Server.Server(server, {
   pingTimeout: 60000,
   cors: {
     origin: allowed_origins,
   },
+  adapter: createAdapter(pubClient, subClient)
 });
 
 function get_time(){
