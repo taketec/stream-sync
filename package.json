@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"cd server && npm start\" \"cd client && npm start\" "
+    "dev": "concurrently \"cd server && npm start\" \"cd client && npm start\" ",
+    "start-all": "concurrently \"cd client && set VITE_SERVE=3001 VITE_BACKEND_URL=http://localhost:8001 && npm start\" \"cd server && set PORT=8001 && npm start\" \"cd client && set VITE_SERVE=3000 VITE_BACKEND_URL=http://localhost:8000 && npm start\" \"cd server && set PORT=8000 && npm start\""
   },
   "author": "",
   "license": "ISC",

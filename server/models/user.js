@@ -35,7 +35,7 @@ userSchema.methods.generateAuthToken = async function () {
   try {
     let token = jwt.sign(
       { id: this._id, email: this.email },
-      process.env.SECRET,
+      '(*&)(Y&OHBAHDGOIASDIUHOIAJSBDGUojhgjhaskef',
       {
         expiresIn: '24h',
       }

@@ -21,9 +21,6 @@ export default defineConfig(({ command, mode }) => {
       // this ensures that the browser opens upon server start
       open: true,
       // this sets a default port to 3000  
-      port: 3000, 
-      define: {
-      __APP_ENV__: JSON.stringify(env.APP_ENV),
-    },
+      port: env.VITE_SERVE||3000, 
   }
 }})

@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Userlist = ({ user_list }) => {
+  console.log(user_list)
   return (
     <div className="bg-white dark:bg-gray-800 overflow-hidden">
       <div className="px-6 py-4">

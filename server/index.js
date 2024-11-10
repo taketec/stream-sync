@@ -14,12 +14,15 @@ import { RedisStore } from 'rate-limit-redis'
 
 const PORT = process.env.PORT || 8000
 
+const REDIS_URL = process.env.REDIS_URL
+
 mongoose.set('strictQuery', false);
 mongoDBConnect();
 
 const allowed_origins =   [
   'http://localhost:3001',
   'http://localhost:3000',
+  'http://localhost:3002',
   'http://192.168.1.4:3000',
   'https://stream-sync-app.onrender.com',
   'https://stream-sync-frontend-s3.s3-website.ap-south-1.amazonaws.com',
@@ -27,21 +30,23 @@ const allowed_origins =   [
   'https://deploy.dd5lzrcymgwyt.amplifyapp.com'
 ]
 
-const client = new Redis()
+const RateLimitclient = new Redis(REDIS_URL)
 
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
-	limit:100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	limit:10, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
 	store: new RedisStore({
 		// @ts-expect-error - Known issue: the `call` function is not present in @types/ioredis
-		sendCommand: (...args) => client.call(...args),
-	}),  statusCode:429,
+		sendCommand: (...args) => RateLimitclient.call(...args),
+	}),  
+  statusCode:429,
   message:  (req, res) => {
-		 return 'You can only make 100 requests every hour.'
+		 return 'You can only make 100 requests every 15 min.'
 	},
 })
+
 
 
 const app = express();
@@ -81,8 +86,16 @@ const server = app.listen(PORT, () => {
 });
 
 
-const pubClient = new Redis();
+const pubClient = new Redis(REDIS_URL);
 const subClient = pubClient.duplicate();
+
+pubClient.on("error", (err) => {
+  console.log(err.message);
+});
+
+subClient.on("error", (err) => {
+  console.log(err.message);
+});
 
 const io = new Server.Server(server, {
   pingTimeout: 60000,
@@ -109,50 +122,72 @@ function get_time(){
 //   }, delay);
 // });
 
-let rooms_state = {}//initialize roomstate object  
+const client = new Redis(REDIS_URL);;
 
+const ROOM_TTL = 86400
+
+let TOTAL_USER_COUNT = 0
+let DISCONNECTED_USER_COUNT = 0
+
+app.get('/user-count', (request, response) => response.send({"USERS IN THE APP":TOTAL_USER_COUNT,"FAILED CONNECTIONS":DISCONNECTED_USER_COUNT}))
 
 
 io.use((socket,next)=>
 AuthSocket(socket,next))  //authenticate socket connection with jwt.
-.on('connection', (socket) => {
+.on('connection',(socket) => {
 
-  socket.on('join_room', ({room:room,username:username}) => {
-
-    if (!rooms_state[room]){
-      console.log('new room created')
-      let blank_state = {
-        media : 'file',
+  socket.on('join_room', async ({ room, username }) => {
+    const roomKey = `room:${room}`;
+    const ROOM_TTL = 86400; // TTL (1 day in seconds)
+    TOTAL_USER_COUNT = TOTAL_USER_COUNT+1
+    // Check if the room exists, and initialize if it doesn’t
+    const exists = await client.exists(roomKey);
+    if (!exists) {
+      console.log('New room created');
+      const blankState = JSON.stringify({
+        media: 'file',
         url: null,
-        video_timestamp : 0.0,
-        lastUpdated : get_time(),
-        playing:false,
+        video_timestamp: 0.0,
+        lastUpdated: get_time(),
+        playing: false,
         global_timestamp: get_time(),
-        //client_uid: get_jwt().substring(37,70)
-      }
-
-      rooms_state[room] = {users:[], state:blank_state}; //adding default room state to a room if it doesnt already exist
+      });
+  
+      // Initialize the room with an empty user list and default state
+      await client.hset(roomKey, 'users', JSON.stringify({}), 'state', blankState);
+      await client.expire(roomKey, ROOM_TTL);
     }
-
-    if (rooms_state[room].users[socket.id] == undefined) { // check if the user is already in the room
-          rooms_state[room].users[socket.id] = username; // add the user to the rooms user list
-          //console.log(`User ${socket.id} joined room ${room}`);
-    } else {
-          console.log(`User ${socket.id} is already in room ${room}`);
-    }
-    console.log(`user ${rooms_state[room].users[socket.id]} joined ${room} `)
-    console.table(rooms_state[room].users)//all the code till now just manages the users state in the global room_state object, and after this the user joins he room
+  
+    // Fetch and parse the current users object from Redis
+    let users = JSON.parse(await client.hget(roomKey, 'users')) || {};
+  
+    // Initialize user’s connection array if it doesn’t exist, and add `socket.id`
+    users[socket.id] = username;
+    console.table(users)
+    // Save updated users list back to Redis and set TTL
+    await client.hset(roomKey, 'users', JSON.stringify(users));
+    await client.expire(roomKey, ROOM_TTL); // Extend TTL whenever a user joins
+  
+    // Join the room and emit the updated user list
     socket.join(room);
-    io.to(room).emit('userlist_update', Object.values(rooms_state[room].users))
+    io.to(room).emit('userlist_update', Object.values(users)); // Emit unique usernames only
+    console.log(`User ${username} (socket ${socket.id}) joined room ${room}`);
   });
+  
 
-  socket.on('explicit_state_request', (room) => {
-    if (rooms_state[room] == undefined){
-      console.log('new room created')
-      rooms_state[room] = {users:[], state:blank_state}; //adding default room state to a room if it doesnt already exist
+  socket.on('explicit_state_request', async(room) => {
+      const roomKey = `room:${room}`;
+    
+      // Fetch the room state from Redis
+      let state = await client.hget(roomKey, 'state');
+      if (state) {
+        socket.emit('state_update_from_server', JSON.parse(state));
+        await client.expire(roomKey, ROOM_TTL);
+      } else {
+        console.log(`Room ${room} not found`);
+      }
     }
-    socket.emit('state_update_from_server',rooms_state[room].state)
-  })
+  )
   
   socket.on('time_sync_request_backward', () => {
     socket.emit('time_sync_response_backward',get_time())
@@ -162,47 +197,84 @@ AuthSocket(socket,next))  //authenticate socket connection with jwt.
     socket.emit('time_sync_response_forward',get_time() - time_at_client)
   })
 
-  socket.on('state_update_from_client',(data) =>{
+  socket.on('state_update_from_client',async (data) =>{
     console.log(data.state)
-      if (rooms_state[data.room] && rooms_state[data.room].state) {
-        rooms_state[data.room].state = data.state;
-        socket.to(data.room).emit("state_update_from_server", rooms_state[data.room].state);
-      } else {
+
+    const roomKey = `room:${data.room}`;
+
+    let newState = {
+      ...data.state,
+      lastUpdated: get_time(),
+      //client_uid: socket.id,
+    };
+
+    await client.hset(roomKey, 'state', JSON.stringify(newState));
+    await client.expire(roomKey, ROOM_TTL);
+    socket.to(data.room).emit('state_update_from_server', newState);
         
-        rooms_state[data.room] = { users: [], state: {
-          media : 'file',
-          url: null,
-          video_timestamp : 0.0,
-          lastUpdated : get_time(),
-          playing:false,
-          global_timestamp: get_time(),
-          //client_uid: get_jwt().substring(37,70)
-        } };
-      }
-      })
+  }   )
 
   //have to use disconnecting here because once the socket is 'disconnected' its room data is lost
-  socket.on('disconnecting', () => {
-    try {{
-    let e = Array.from(socket.rooms) //convert socket.rooms which is a set to a array, since a set doesnt have indexes idk if this will always work, the room and socketid might flip indexes 
+  socket.on('disconnecting', async () => {
+    try {
+      // Get the rooms the socket is connected to
+      let rooms = Array.from(socket.rooms);
+      console.log(socket.rooms)
+      if (rooms.length > 1) {
+        const room = rooms[1];
+        const roomKey = `room:${room}`;
+        console.log(rooms) //[ 'SN9W15L4Vk5AccWqAAAH', '12345' ]
+        // Remove the user from the room’s user list in Redis
+        let users = JSON.parse(await client.hget(roomKey, 'users'));
+        delete users[rooms[0]];
+        await client.hset(roomKey, 'users', JSON.stringify(users));
 
-    //e[0] socketid if the current client 
-    //e[1] room the socket is in
+        console.log(Object.keys(users).length)
+        
+        if(Object.keys(users).length <= 0){
+          await client.expire(roomKey, 60)
+        }
 
-    console.log(e)
 
-    //socket.to(e[1]).emit('user_left_room' , rooms_state[e[1]].users[e[0]])
-    if(rooms_state[e[1]].users[e[0]]){
-    delete rooms_state[e[1]].users[e[0]]; 
-    }else{
-    io.to(e[1]).emit('userlist_update', Object.values(rooms_state[e[1]].users).filter(Boolean))}
-    //logic to remove the user from the room 
-    console.table(rooms_state[e[1]])
-  };
+        TOTAL_USER_COUNT = TOTAL_USER_COUNT - 1
+        DISCONNECTED_USER_COUNT = DISCONNECTED_USER_COUNT + 1
+        // Notify other users in the room
+        io.to(room).emit('userlist_update', Object.values(users));
+        console.log(`User ${socket.id} left room ${room}`);
+      }
+    } catch (error) {
+      console.log('Error in disconnecting:', error);
     }
-  catch(error){
-    console.log(error)
-  }}
-)
+  });
 
 });
+
+/*
+room_state schema
+{room;//this will be a hashmap and the state will be basic json
+      {
+        users: [a,b,c,d], 
+        state: {//state which is last updated
+          media:"file",
+          url:null,
+          video_timestamp : 0.0,
+          lastUpdated : 1234,
+          playing:false,
+          global_timestamp: 1234,
+          client_uid: asdf//whoever updated it.
+        } }}
+or
+      { 
+        users: [a,b,c,d], 
+        state: {
+          media:"youtube",
+          url:"https://www.youtube.com/watch?v=7XhhOVGF8sg&list=RD7XhhOVGF8sg&start_radio=1",
+          video_timestamp : 0.0,
+          lastUpdated : 5678,
+          playing:false,
+          global_timestamp: 5678,
+          /client_uid: zxcvzxcv
+              }
+        }
+}
+*/
