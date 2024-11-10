@@ -6,6 +6,8 @@
 /client/.pnp.js
 /server/node_modules
 /server/.env
+/server/Dockerfile
+/server/compose.yaml
 
 /node_modules
 
