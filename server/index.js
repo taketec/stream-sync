@@ -14,7 +14,7 @@ import { RedisStore } from 'rate-limit-redis'
 
 const PORT = process.env.PORT || 8000
 
-const REDIS_URL = process.env.REDIS_URL
+const REDIS_URL = process.env.REDIS_URL+'?family=0'
 
 mongoose.set('strictQuery', false);
 mongoDBConnect();
