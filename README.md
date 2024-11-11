@@ -1,7 +1,6 @@
 # stream-sync, a watch-party app made with react, express, mongoDB and socket-io 
 
 - demo - [https://deploy.dd5lzrcymgwyt.amplifyapp.com](https://deploy.dd5lzrcymgwyt.amplifyapp.com)
-  ⚠️⚠️⚠️(Please be patient with the app, it might 2-5 seconds for everything to bootup and work.)⚠️⚠️⚠️
 - the demo runs off of the deploy branch which has slight modifications.
 
 # previews-
@@ -25,7 +24,7 @@ Doing some research upon this I found this really cool medium article https://le
 Later on as i delved deeper into the world of web development, I really needed a good excuse to build a web app for learning web dev, so, I made this app.
 
 ## Challenges
-- Managing video state with react player. The play/pause becomes out of state alot of the times. And it is very hard to exactly know where the video is and what its state is. This bug propagates trough and leads to a buggy experience.
+- Managing video state with react player. The play/pause becomes out of state alot of the times. And it is very hard to exactly know where the video is and what its state is. This bug propagates through and leads to a buggy experience.
   
 
 ## Features i would love to implement later with time - (from most important to least)
