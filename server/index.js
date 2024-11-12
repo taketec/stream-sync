@@ -40,7 +40,7 @@ const RateLimitclient = new Redis(REDIS_URL)
 
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
-	limit:10, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	limit:100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
 	store: new RedisStore({
@@ -73,6 +73,12 @@ const createLog = (req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(createLog)
+
+if(process.env.PRODUCTION == "true"){
+  app.use(limiter)
+}
+
+
 //app.use(limiter)
 //xapp.options("*",cors(corsConfig))
 app.use(cors(corsConfig));
