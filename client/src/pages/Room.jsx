@@ -165,7 +165,7 @@ const Room = () => {
 
 
   return (
-    <div className="flex h-screen dark:bg-gray-800">
+    <div className="flex h-screen bg-gray-800">
       <div className="flex-1 flex flex-col">
         {socket && (
           <nav>
@@ -173,7 +173,7 @@ const Room = () => {
               <li className="mr-2">
                 <button
                   onClick={() => handleTabChange('youtube')}
-                  className="m-2 my-2 px-2 py-1 rounded-sm bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20 dark:bg-blue-600 dark:hover:bg-blue-700"
+                  className="m-2 my-2 px-2 py-1 rounded-sm  text-white text-sm font-medium  w-20 bg-blue-600 hover:bg-blue-700"
                 >
                   Youtube
                 </button>
@@ -181,7 +181,7 @@ const Room = () => {
               <li className="ml-2">
                 <button
                   onClick={() => handleTabChange('file')}
-                  className="m-2 my-2 px-2 py-1 rounded-sm bg-blue-500 text-white text-sm font-medium hover:bg-blue-700 w-20 dark:bg-blue-600 dark:hover:bg-blue-700"
+                  className="m-2 my-2 px-2 py-1 rounded-sm  text-white text-sm font-medium -700 w-20 bg-blue-600 hover:bg-blue-700"
                 >
                   File
                 </button>
@@ -198,7 +198,7 @@ const Room = () => {
           )}
         </div>
       </div>
-      <div className="overflow-y-auto pt-5 bg-gray-100 dark:bg-gray-800 dark:text-gray-100" style={{ flex: '0 0 auto' }}>
+      <div className="overflow-y-auto pt-5 bg-gray-800 text-gray-100" style={{ flex: '0 0 auto' }}>
         <Userlist user_list={users} />
       </div>
     </div>
