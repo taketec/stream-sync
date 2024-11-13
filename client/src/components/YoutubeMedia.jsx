@@ -33,7 +33,7 @@ const YouTubeMedia = ({socket,roomId,correction}) => {
     } 
     
     lastUpdated.current = get_global_time()
-    let proposed_time = (state.playing) ? ((state.video_timestamp - state.global_timestamp) + get_global_time(correction) ) : (state.video_timestamp)
+    let proposed_time = (state.playing) ? ((state.video_timestamp - state.lastUpdated) + get_global_time(correction) ) : (state.video_timestamp)
     let gap = Math.abs(proposed_time - playerRef.current.getCurrentTime())
     
     console.log(`%cGap was ${gap}`, 'font-size:12px; color:purple')
