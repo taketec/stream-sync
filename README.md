@@ -30,7 +30,6 @@ Later on as i delved deeper into the world of web development, I really needed a
 ## Features i would love to implement later with time - (from most important to least)
 - Integrate a CDN for a video on demand service (VOD) so that users can upload and watch video streams OR stream video throught webtorrents (that would be cool)
 - adding custom player controls to the react player, or using a better player so that we can distinguish between user inputs and server made changes to the video-player without hacking around as mentioned in the article
-- splitting the server into a main service for authentication/room creation and socket-io services with a redis backplane to make the whole thing scalable.
 - adding a create/join room page(like google meet)
 - adding login with forgot password and email verification (i have only kept login with google in the demo, because this wasnt implemented)
 - making the overall ui/ux better
