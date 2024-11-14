@@ -23,9 +23,6 @@ Doing some research upon this I found this really cool medium article https://le
 
 Later on as i delved deeper into the world of web development, I really needed a good excuse to build a web app for learning web dev, so, I made this app.
 
-## Challenges
-- Managing video state with react player. The play/pause becomes out of state alot of the times. And it is very hard to exactly know where the video is and what its state is. This bug propagates through and leads to a buggy experience.
-  
 
 ## Features i would love to implement later with time - (from most important to least)
 - Integrate a CDN for a video on demand service (VOD) so that users can upload and watch video streams OR stream video throught webtorrents (that would be cool)
