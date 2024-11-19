@@ -2,6 +2,13 @@
 import user from '../models/user.js';
 import axios from "axios"
 import jwt from 'jsonwebtoken';
+import { Redis } from "ioredis";
+import crypto from "crypto"
+
+let REDIS_URL = process.env.REDIS_URL
+
+const RedisClient = new Redis(REDIS_URL)
+
 
 export const register = async (req, res) => {
   const { username, email, password } = req.body;
@@ -47,11 +54,50 @@ export const register = async (req, res) => {
       const validuser = await user
         .findOne({ _id: req.userId })
         .select('-password');
-      if (!validuser) res.json({ message: 'user is not valid' });
-      res.status(201).json({
+      if (!validuser) return res.status(401).json({ message: 'user is not valid' });
+      return res.status(201).json({
         user: validuser,
         token: req.token,
       });
+    } catch (error) {
+      return res.status(401).json({ error: error });
+      console.log(error);
+    }
+  };
+
+  const generateRefreshToken = () => {
+    return crypto.randomBytes(40).toString("hex"); // Generate a secure random string
+  };
+
+  const generateAccessToken = (clientData) => {
+    const token = jwt.sign(JSON.parse(clientData), process.env.SECRET, { expiresIn: '15m' }); 
+    return token
+  };
+
+  export const refreshToken = async (req, res) => {
+    try {
+      const { refreshToken } = req.body;
+      if (!refreshToken ) return res.sendStatus(401);
+      const clientData = await RedisClient.get(refreshToken);
+      if (!clientData) return res.sendStatus(403); // Invalid or expired token
+
+
+      const newAccessToken = generateAccessToken(clientData);
+
+      const newRefreshToken = generateRefreshToken();
+
+      await RedisClient.set(
+        newRefreshToken,
+        clientData,
+        "EX",
+        60 * 60 * 24 * 30 // 30 days expiry
+      );
+      // Set expiry of old refresh token to 5 seconds to handle multiple requests
+      await RedisClient.set(refreshToken,clientData,"EX", 5);//to handle the edge case if a client fires 2 requests for a new token with the same RT at the same time
+      //we dont delete the old token immediately, we keep it for some seconds.
+
+      res.json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+
     } catch (error) {
       res.status(500).json({ error: error });
       console.log(error);
@@ -105,11 +151,29 @@ export const register = async (req, res) => {
           const newuser = new user({ email, password,name: username });
           const token = await newuser.generateAuthToken();
           await newuser.save();
-          return res.json({ message: 'success', token: token });
+
+          const refreshToken = generateRefreshToken();
+
+          await RedisClient.set(
+            refreshToken,
+            JSON.stringify({ id: newuser._id, email: newuser.email }),
+            "EX",
+            60 * 60 * 24 * 30 // 30 days expiry
+          );
+
+          return res.json({ message: 'success', token: token , refreshToken: refreshToken});
         }
         else{
           token = await existingUser.generateAuthToken()
-          return res.json({ message: 'success', token: token });
+          const refreshToken = generateRefreshToken();
+          await RedisClient.set(
+            refreshToken,
+            JSON.stringify({ id: existingUser._id, email: existingUser.email }),
+            "EX",
+            60 * 60 * 24 * 30 // 30 days expiry
+          );
+
+          return res.json({ message: 'success', token: token , refreshToken: refreshToken});
         }
       })
 

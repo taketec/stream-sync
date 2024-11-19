@@ -6,6 +6,7 @@ export const Auth = async (req, res, next) => {
     
     let token = req.headers.authorization.split(' ')[0]; //when using browser this line
       const verifiedUser = jwt.verify(token, process.env.SECRET);
+      console.log("verified user",verifiedUser)
       req.token = token;
       req.userId = verifiedUser.id
 
@@ -17,8 +18,8 @@ export const Auth = async (req, res, next) => {
 
     next();
   } catch (error) {
-    // console.log(error);
-    res.json({ error: 'Invalid Token' });
+    console.log(error);
+    return res.status(401).json({ error: 'Invalid Token' });
   }
 };
 

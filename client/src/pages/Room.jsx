@@ -33,33 +33,28 @@ const Room = () => {
   useEffect(() => {
     const check_auth = async () => {
       try {
-        const token = localStorage.getItem('userToken');
-        if (token) {
-          const response = await validUser();
-          if (!response.token) {
-            navigate('/login',{state:roomId}); // Replace with your dashboard route
-            
-            localStorage.removeItem('userToken'); // Clear invalid token
-
-          }
-          } 
-        else {
-          navigate('/login',{state:roomId}); // Replace with your dashboard route
+        const response = await validUser();
+  
+        if (!response.token) {
+          navigate('/login', { state: roomId });
         }
-        }
-     catch (error) {
+      } catch (error) {
         console.error('Error checking authentication:', error);
+        navigate('/login', { state: roomId });
       }
     };
-    check_auth();}, 
-  []); 
-
+  
+    check_auth();
+  }, []);
+  
 
   useEffect(() => {
     const socket_listen = async() => {
       socket = io(url, {auth: {
         token: localStorage.getItem('userToken')
-      }})
+      },
+       transports: ["websocket"] 
+    })
       //socket = io('http://localhost:8000')
       const response = await validUser();
       let username

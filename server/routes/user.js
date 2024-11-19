@@ -4,6 +4,7 @@ import {
     updateInfo,
     googleLogin,
     getUserById,
+    refreshToken
   } from '../controllers/user.js';
   import express from 'express';
 
@@ -18,6 +19,6 @@ router.get('/auth/valid', Auth, validUser);
 //router.get('/auth/logout', Auth, logout);
 router.get('/api/user?', Auth, searchUsers);
 router.get('/api/users/:id', Auth, getUserById);
+router.post('/auth/refresh',refreshToken)
 router.patch('/api/users/update/:id', Auth, updateInfo);
-
 export default router;

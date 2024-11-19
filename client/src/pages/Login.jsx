@@ -32,7 +32,7 @@ const Login = () => {
             navigate(`/room/${roomId}`);}
             
           } else {
-            localStorage.removeItem('userToken');
+            //localStorage.removeItem('userToken');
           }
         }
       } catch (error) {
@@ -47,27 +47,22 @@ const Login = () => {
     onSuccess: async (tokenResponse) => {
       try {
         console.log('Google login successful', tokenResponse.access_token);
-
+  
         const response = await googleLoginUser({ token: tokenResponse.access_token });
-        let token = response.data.token;
+        const { token, refreshToken } = response.data;
         localStorage.setItem('userToken', token);
-
-
-        if (prevRoom.current){
+        localStorage.setItem('refreshToken', refreshToken);
+  
+        if (prevRoom.current) {
           navigate(`/room/${prevRoom.current}`);
-        }else{
-          let roomId = generate_random_string()
-          navigate(`/room/${roomId}`);}
-
+        } else {
+          const roomId = generate_random_string();
+          navigate(`/room/${roomId}`);
+        }
       } catch (error) {
         setErrorMessage(error.response?.data?.message || 'Login failed');
       }
     },
-
-    onError: () => {
-      setErrorMessage('Google login failed');
-      console.error('Google login failed');
-    }
   });
 
   return (
