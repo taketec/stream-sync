@@ -7,6 +7,10 @@ import crypto from "crypto"
 
 let REDIS_URL = process.env.REDIS_URL
 
+if(process.env.PRODUCTION == "true"){
+  REDIS_URL = REDIS_URL+ "?family=0"
+}
+
 const RedisClient = new Redis(REDIS_URL)
 
 
