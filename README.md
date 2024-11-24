@@ -1,4 +1,4 @@
-# stream-sync, a watch-party app made with react, express, mongoDB,redis and socket-io 
+# stream-sync, a watch-party app made with react, express, mongoDB, redis and socket-io 
 
 - demo - [https://deploy.dd5lzrcymgwyt.amplifyapp.com](https://deploy.dd5lzrcymgwyt.amplifyapp.com)
 - the demo runs off of the deploy branch which has slight modifications.
